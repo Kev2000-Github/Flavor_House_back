@@ -18,10 +18,12 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "nodemon": "^2.0.20",
     "uuid": "^9.0.0"
   },
+  "optionalDependencies": {
+    "@Kev2000-Github/asisback-cli": "^1.0.2"
+  },
   "devDependencies": {
-    "asisback-cli": "^1.0.0"
+    "nodemon": "^3.0.1"
   }
 }
