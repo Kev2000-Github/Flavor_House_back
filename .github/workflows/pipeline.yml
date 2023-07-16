@@ -1,3 +1,5 @@
+name: Deployment Pipeline
+
 on:
   push:
       branches:
@@ -11,8 +13,6 @@ jobs:
         with:
           node-version: 16
           cache: 'npm'
-      - name: Install dependencies
       - run: npm install
-      - name: Lint
       - run: npm run lint
       
