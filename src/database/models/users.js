@@ -22,20 +22,29 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Users.init({
+    id: {
+      allowNull: false,
+      primaryKey: true,
+      type: DataTypes.UUIDV4
+    },
     fullName: {
       type: DataTypes.STRING,
+      field: 'full_name',
       allowNull: false
     },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: {
-        msg: "This username is already being used"
+        msg: "This username is already taken"
       }
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      unique: {
+        msg: "This email is already taken"
+      }
     },
     password: {
       type: DataTypes.STRING,
@@ -43,11 +52,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     sex: enumFields(DataTypes, SEX, SEX.NONE),
     phoneNumber: {
+      field: 'phone_number',
       type: DataTypes.STRING
     },
     countryId: {
       field: 'country_id',
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     step: {
       type: DataTypes.INTEGER,

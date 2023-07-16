@@ -33,7 +33,11 @@ module.exports = (sequelize, DataTypes) => {
     type: enumFields(DataTypes, POST_TYPE, POST_TYPE.MOMENT),
   }, {
     sequelize,
+    tableName: 'posts',
     modelName: 'Posts',
+    underscored: true,
+    timestamps: true,
+    paranoid: true
   });
   return Posts;
 };

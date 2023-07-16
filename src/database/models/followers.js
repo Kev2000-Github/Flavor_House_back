@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Followers',
     tableName: 'followers',
     underscored: true,
-    timestamps: false,
+    timestamps: true,
     paranoid: true
   });
   return Followers;
