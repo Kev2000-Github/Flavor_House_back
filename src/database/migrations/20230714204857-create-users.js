@@ -12,7 +12,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.STRING
       },
-      fullName: {
+      full_name: {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -34,7 +34,7 @@ module.exports = {
         type: Sequelize.ENUM(...enumArray(SEX)),
         allowNull: false
       },
-      phoneNumber: {
+      phone_number: {
         type: Sequelize.STRING
       },
       country_id: {
