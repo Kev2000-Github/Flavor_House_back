@@ -3,9 +3,9 @@ name: Deployment Pipeline
 on:
   push:
       branches:
-        - main
+        - master
 jobs:
-  verification:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
