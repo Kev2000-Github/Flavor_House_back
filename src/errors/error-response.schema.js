@@ -5,10 +5,11 @@ module.exports = {
       error: {
         type: "object",
         properties: {
-          code: {type:"number"},
+          status: {type:"number"},
+          code: {type:"string"},
           message: {type:"string"}
         }
       }
     },
-    additionalProperties: false
+    additionalProperties: true
   }

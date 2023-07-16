@@ -2,35 +2,43 @@ const { ERROR_CODES } = require('./constants')
 
 class HttpStatusError extends Error {
     constructor(
+        status,
         code,
         message
     ) {
         super(message)
         this.code = code
+        this.status = status
     }
 
-    static notFound({message}) {
-        return new HttpStatusError(ERROR_CODES.NOT_FOUND, message)
+    static notFound({message, code}) {
+        code = code ?? "default_error"
+        return new HttpStatusError(ERROR_CODES.NOT_FOUND, code, message)
     }
 
-    static badRequest ({message}) {
-        return new HttpStatusError(ERROR_CODES.BAD_REQUEST, message)
+    static badRequest ({message, code}) {
+        code = code ?? "default_error"
+        return new HttpStatusError(ERROR_CODES.BAD_REQUEST, code, message)
     }
 
-    static forbidden ({message}) {
-        return new HttpStatusError(ERROR_CODES.FORBIDDEN, message)
+    static forbidden ({message, code}) {
+        code = code ?? "default_error"
+        return new HttpStatusError(ERROR_CODES.FORBIDDEN, code, message)
     }
 
-    static unauthorize ({message}) {
-        return new HttpStatusError(ERROR_CODES.UNAUTHORIZED, message)
+    static unauthorize ({message, code}) {
+        code = code ?? "default_error"
+        return new HttpStatusError(ERROR_CODES.UNAUTHORIZED, code, message)
     }
 
-    static internalServerError ({message}) {
-        return new HttpStatusError(ERROR_CODES.INTERNAL_SERVER_ERROR, message)
+    static internalServerError ({message, code}) {
+        code = code ?? "default_error"
+        return new HttpStatusError(ERROR_CODES.INTERNAL_SERVER_ERROR, code, message)
     }
 
-    static unprocesableEntity ({message}) {
-        return new HttpStatusError(ERROR_CODES.UNPROCESSABLE_ENTITY, message)
+    static unprocesableEntity ({message, code}) {
+        code = code ?? "default_error"
+        return new HttpStatusError(ERROR_CODES.UNPROCESSABLE_ENTITY, code, message)
     }
 }
 

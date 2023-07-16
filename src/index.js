@@ -9,7 +9,7 @@ const {PORT} = require('./config')
 
 app.use(cors())
 app.use(express.json())
-app.use('/', router)
+app.use('/v1', router)
 app.use(errorHandler)
 
 http.listen(PORT, () => {

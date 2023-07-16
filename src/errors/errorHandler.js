@@ -1,29 +1,41 @@
 const { ERROR_CODES } = require("./constants")
 const {version} = require('../../package.json')
+
 const errorHandler = (err, req, res, next) => {
     if(res.headersSent) {
         return next(err)
     }
-    console.error(err)
-    if(err.name === 'ValidationError'){
+    if(/^Sequelize/.test(err.name)){
         let errors = ""
-        Object.keys(err.errors).forEach((key) => {
-          errors += `${key}: ${err.errors[key].message} `;
-        });
+        switch(err.name){
+            case 'SequelizeForeignKeyConstraintError':
+                errors += err.fields.reduce((acc, curr) => {
+                    return acc + `invalid value ${curr}, `
+                }, '')
+                break;
+            default:
+                Object.keys(err.errors).forEach((key) => {
+                  errors += `${err.errors[key].message}, `;
+                });
+        }
+        errors = errors.trimEnd().replace(/,$/,"")
         res.status(ERROR_CODES.UNPROCESSABLE_ENTITY)
         res.json({
             apiVersion: version,
             error: {
-                code: ERROR_CODES.UNPROCESSABLE_ENTITY,
+                status: ERROR_CODES.UNPROCESSABLE_ENTITY,
+                code: "db_error",
                 message: errors
             }
         })
     }
     else{
-        res.status(err.code)
+        err.status = err.status ?? ERROR_CODES.INTERNAL_SERVER_ERROR
+        res.status(err.status)
         res.json({
             apiVersion: version,
             error: {
+                status: err.status,
                 code: err.code,
                 message: err.message
             }

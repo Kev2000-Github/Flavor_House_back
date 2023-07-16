@@ -1,5 +1,6 @@
 const { HttpStatusError } = require("../errors/httpStatusError")
 const { ERROR_TYPES } = require('../errors/constants');
+const bcrypt = require('bcrypt')
 
 const isJSON = (objStringified) => {
     try{
@@ -45,8 +46,9 @@ const verifyPassword = async (password, hash) => {
 */
 const errorFormatter = errors => {
     return errors.reduce((message, err) => {
-        return `${message} ${err.instancePath.replace(/\//g, '')} ${err.message}`
-    }, '').trim().replace(/\n/g, '')
+        let errorMessage = err.instancePath.split("/").pop()
+        return `${message}${errorMessage}: ${err.message}, `
+    }, '').trim().replace(/,$/, '')
 }
 
 module.exports = {
