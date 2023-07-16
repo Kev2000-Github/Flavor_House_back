@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const http = require('http').Server(app)
-require('dotenv').config();
+require('dotenv').config()
 const { router } = require('./routes')
 const {errorHandler} = require('./errors/errorHandler')
 const {PORT} = require('./config')

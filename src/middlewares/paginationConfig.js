@@ -1,7 +1,7 @@
-const { controllerWrapper } = require("../utils/common")
+const { controllerWrapper } = require('../utils/common')
 
 const paginationConfig = controllerWrapper(async (req, res, next) => {
-    let {limit= "10", page="0"} = req.query
+    let {limit= '10', page='0'} = req.query
     limit = Math.floor(Number(limit))
     page = Math.floor(Number(page))
     page = page > 0 ? page - 1 : 0
@@ -17,5 +17,5 @@ const paginationConfig = controllerWrapper(async (req, res, next) => {
 })
 
 module.exports = {
-  paginationConfig
+    paginationConfig
 }

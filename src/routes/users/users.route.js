@@ -13,7 +13,7 @@ router.get(
     authentication,
     paginationConfig,
     controller.get_users
-    )
+)
 
 router.get(
     '/:id', 
@@ -21,14 +21,14 @@ router.get(
     validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'users.out-get-users-id.schema.js'))),
     authentication,
     controller.get_users_id
-    )
+)
 
 router.post(
     '/', 
     validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'users.in-post-users.schema.js'))),
     validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'users.out-post-users.schema.js'))),
     controller.post_users
-    )
+)
 
 router.put(
     '/:id', 
@@ -36,7 +36,7 @@ router.put(
     validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'users.out-put-users.schema.js'))),
     authentication,
     controller.put_users
-    )
+)
 
 router.delete(
     '/:id', 
@@ -44,7 +44,7 @@ router.delete(
     validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'users.out-delete-users.schema.js'))),
     authentication,
     controller.delete_users
-    )
+)
 
 //ROUTES ABOVE --DON'T TOUCH THIS--
 module.exports = {

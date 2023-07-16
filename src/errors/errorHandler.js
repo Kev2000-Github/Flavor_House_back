@@ -1,4 +1,4 @@
-const { ERROR_CODES } = require("./constants")
+const { ERROR_CODES } = require('./constants')
 const {version} = require('../../package.json')
 
 const errorHandler = (err, req, res, next) => {
@@ -6,25 +6,25 @@ const errorHandler = (err, req, res, next) => {
         return next(err)
     }
     if(/^Sequelize/.test(err.name)){
-        let errors = ""
+        let errors = ''
         switch(err.name){
-            case 'SequelizeForeignKeyConstraintError':
-                errors += err.fields.reduce((acc, curr) => {
-                    return acc + `invalid value ${curr}, `
-                }, '')
-                break;
-            default:
-                Object.keys(err.errors).forEach((key) => {
-                  errors += `${err.errors[key].message}, `;
-                });
+        case 'SequelizeForeignKeyConstraintError':
+            errors += err.fields.reduce((acc, curr) => {
+                return acc + `invalid value ${curr}, `
+            }, '')
+            break
+        default:
+            Object.keys(err.errors).forEach((key) => {
+                errors += `${err.errors[key].message}, `
+            })
         }
-        errors = errors.trimEnd().replace(/,$/,"")
+        errors = errors.trimEnd().replace(/,$/,'')
         res.status(ERROR_CODES.UNPROCESSABLE_ENTITY)
         res.json({
             apiVersion: version,
             error: {
                 status: ERROR_CODES.UNPROCESSABLE_ENTITY,
-                code: "db_error",
+                code: 'db_error',
                 message: errors
             }
         })

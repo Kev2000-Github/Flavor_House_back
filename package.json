@@ -7,6 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./src/index.js",
     "dev": "nodemon ./src/index.js",
+    "lint": "npx eslint .",
+    "lint:fix": "npx eslint . --fix",
     "db:migrate": "npx sequelize db:migrate",
     "db:reset": "npx sequelize db:drop && npx sequelize db:create && npx sequelize db:migrate && npx sequelize db:seed:all",
     "model:gen": "npx sequelize model:generate",
@@ -32,6 +34,7 @@
     "@Kev2000-Github/asisback-cli": "^1.0.5"
   },
   "devDependencies": {
+    "eslint": "^8.45.0",
     "nodemon": "^3.0.1",
     "npm-check-updates": "^16.10.15",
     "sequelize-cli": "^6.6.1"

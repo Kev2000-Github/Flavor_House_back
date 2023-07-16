@@ -1,10 +1,8 @@
-const { HttpStatusError } = require("../errors/httpStatusError")
-const { ERROR_TYPES } = require('../errors/constants');
 const bcrypt = require('bcrypt')
 
 const isJSON = (objStringified) => {
     try{
-        const obj = JSON.parse(objStringified)
+        JSON.parse(objStringified)
         return true
     }
     catch(err){
@@ -28,13 +26,13 @@ const mapObject = (obj, cb) => {
 }
 
 const hashPassword = async (saltRounds = 10, password) => {
-  return await new Promise((resolve, reject) => {
-      bcrypt.hash(password, saltRounds, (err, hash) => {
-          if (err) reject(err);
-          resolve(hash)
-      });
-  });
-};
+    return await new Promise((resolve, reject) => {
+        bcrypt.hash(password, saltRounds, (err, hash) => {
+            if (err) reject(err)
+            resolve(hash)
+        })
+    })
+}
 
 const verifyPassword = async (password, hash) => {
     const isSame = await bcrypt.compare(password, hash)
@@ -46,7 +44,7 @@ const verifyPassword = async (password, hash) => {
 */
 const errorFormatter = errors => {
     return errors.reduce((message, err) => {
-        let errorMessage = err.instancePath.split("/").pop()
+        let errorMessage = err.instancePath.split('/').pop()
         return `${message}${errorMessage}: ${err.message}, `
     }, '').trim().replace(/,$/, '')
 }

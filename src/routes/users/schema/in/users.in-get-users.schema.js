@@ -1,17 +1,17 @@
 module.exports = {
-    type: "object",
+    type: 'object',
     properties: {
-      body: {
-        type: "object"
-      },
-      params: {
-        type: "object"
-      },
-      query: {
-        type: "object"
-      },
-      headers: {
-        type: "object"
-      }
+        body: {
+            type: 'object'
+        },
+        params: {
+            type: 'object'
+        },
+        query: {
+            type: 'object'
+        },
+        headers: {
+            type: 'object'
+        }
     }
 }

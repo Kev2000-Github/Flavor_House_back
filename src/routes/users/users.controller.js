@@ -64,9 +64,9 @@ module.exports.post_users = controllerWrapper(async (req, res) => {
         data,
         config.JWT_TOKEN,
         {
-          expiresIn: "7d",
+            expiresIn: '7d',
         }
-      );
+    )
     res.json({data, token})
 })
 

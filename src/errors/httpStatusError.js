@@ -12,32 +12,32 @@ class HttpStatusError extends Error {
     }
 
     static notFound({message, code}) {
-        code = code ?? "default_error"
+        code = code ?? 'default_error'
         return new HttpStatusError(ERROR_CODES.NOT_FOUND, code, message)
     }
 
     static badRequest ({message, code}) {
-        code = code ?? "default_error"
+        code = code ?? 'default_error'
         return new HttpStatusError(ERROR_CODES.BAD_REQUEST, code, message)
     }
 
     static forbidden ({message, code}) {
-        code = code ?? "default_error"
+        code = code ?? 'default_error'
         return new HttpStatusError(ERROR_CODES.FORBIDDEN, code, message)
     }
 
     static unauthorize ({message, code}) {
-        code = code ?? "default_error"
+        code = code ?? 'default_error'
         return new HttpStatusError(ERROR_CODES.UNAUTHORIZED, code, message)
     }
 
     static internalServerError ({message, code}) {
-        code = code ?? "default_error"
+        code = code ?? 'default_error'
         return new HttpStatusError(ERROR_CODES.INTERNAL_SERVER_ERROR, code, message)
     }
 
     static unprocesableEntity ({message, code}) {
-        code = code ?? "default_error"
+        code = code ?? 'default_error'
         return new HttpStatusError(ERROR_CODES.UNPROCESSABLE_ENTITY, code, message)
     }
 }
