@@ -1,11 +1,11 @@
-name: Deployment Pipeline
+name: Verification Pipeline
 
 on:
   push:
       branches:
         - "*"
 jobs:
-  deploy:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
