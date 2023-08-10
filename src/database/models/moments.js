@@ -13,9 +13,6 @@ module.exports = (sequelize, DataTypes) => {
             Moments.belongsTo(models.Posts, {
                 foreignKey: 'postId'
             })
-            Moments.belongsTo(models.ViewPosts, {
-                foreignKey: 'postId'
-            })
         }
     }
     Moments.init({

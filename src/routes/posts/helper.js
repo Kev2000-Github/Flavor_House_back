@@ -6,9 +6,9 @@ module.exports.responseData = (recipe) => {
         title: recipe.name,
         description: recipe.description,
         image: recipe.image,
-        madeBy: userResponseData(recipe.Post?.User ?? recipe.ViewPost?.User),
-        likes: recipe.ViewPost?.likes,
-        isLiked: recipe.ViewPost?.Likes.length > 0,
-        isFavorite: recipe.ViewPost?.Favorites.length > 0
+        madeBy: userResponseData(recipe.Post?.User),
+        likes: recipe.Post.getLikes(),
+        isLiked: recipe.Post?.Likes.length > 0,
+        isFavorite: recipe.Post?.Favorites.length > 0
     } : null
 }

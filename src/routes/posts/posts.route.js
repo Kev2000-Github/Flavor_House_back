@@ -13,6 +13,14 @@ router.get(
     paginationConfig,
     controller.get_posts_recipe
 )
+
+router.get(
+    '/recipe/:id', 
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'posts.in-get-posts-recipe-id.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'posts.out-get-posts-recipe-id.schema.js'))),
+    authentication,
+    controller.get_posts_recipe_id
+)
 //ROUTES ABOVE --DON'T TOUCH THIS--
 module.exports = {
     postsRouter: router

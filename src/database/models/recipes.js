@@ -13,9 +13,6 @@ module.exports = (sequelize, DataTypes) => {
             Recipes.belongsTo(models.Posts, {
                 foreignKey: 'postId'
             })
-            Recipes.belongsTo(models.ViewPosts, {
-                foreignKey: 'postId'
-            })
         }
     }
     Recipes.init({

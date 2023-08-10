@@ -15,6 +15,9 @@ module.exports = (sequelize, DataTypes) => {
             Posts.belongsTo(models.Users, {
                 foreignKey: 'madeBy'
             })
+            Posts.hasOne(models.ViewPostsLikes, {
+                foreignKey: 'id'
+            })
             Posts.hasMany(models.Likes, {
                 foreignKey: 'post_id'
             })
@@ -47,5 +50,10 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: true,
         paranoid: true
     })
+
+    Posts.prototype.getLikes = () => {
+        return this.ViewPost?.likes ?? 0
+    }
+
     return Posts
 }
