@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
             Interests.belongsToMany(models.Users, {
                 through: models.UserInterests
             })
+            Interests.belongsToMany(models.Recipes, {
+                through: models.RecipeTags,
+                foreignKey: 'tagId'
+            })
         }
     }
     Interests.init({
@@ -28,6 +32,9 @@ module.exports = (sequelize, DataTypes) => {
         imageUrl: {
             type: DataTypes.STRING,
             field: 'image_url'
+        },
+        color: {
+            type: DataTypes.STRING
         }
     }, {
         sequelize,

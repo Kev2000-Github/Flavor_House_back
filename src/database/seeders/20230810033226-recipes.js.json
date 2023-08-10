@@ -4,7 +4,7 @@
         "title": "Title",
         "description": "¡Descubriendo nuevos sabores! Hoy probé este exquisito plato y quedé fascinado. Cada bocado era una explosión de sabores y texturas. ¡No puedo esperar para compartir esta joya culinaria con ustedes! Si eres amante de la buena comida, no te lo puedes perder. ¿Alguien más se anima a probarlo? #DeliciasGastronómicas #SorprendentesSabores #ExperienciaCulinaria",
         "image": "sample",
-        "tags": [],
+        "tags": ["dulce", "pasteles"],
         "ingredients": ["1/2 taza de leche", "1 taza de harina", "1/2 taza de azúcar", "1/4 taza de cacao en polvo sin azúcar", "1 cucharadita de polvo de hornear", "1/2 cucharadita de bicarbonato de sodio", "1/2 cucharadita de sal", "1/2 taza de aceite vegetal", "1 huevo", "1 cucharadita de extracto de vainilla"],
         "steps": [
             { "image": "url", "description": "Precalienta el horno a 180°C (350°F)." },
@@ -52,6 +52,5 @@
         ],
         "likes": ["ReyDeLaCocina","MariaP","SophieH","EmiD"],
         "favorites": ["ReyDeLaCocina","MariaP","SophieH","EmiD", "MikeS"]
-
     }
 ]

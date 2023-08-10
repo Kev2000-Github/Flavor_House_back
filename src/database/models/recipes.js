@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
             Recipes.belongsTo(models.Posts, {
                 foreignKey: 'postId'
             })
+            Recipes.belongsToMany(models.Interests, {
+                through: models.RecipeTags,
+                foreignKey: 'recipeId',
+                as: 'Tags'
+            })
         }
     }
     Recipes.init({

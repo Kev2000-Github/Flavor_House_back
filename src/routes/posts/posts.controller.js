@@ -1,4 +1,4 @@
-const { Posts, ViewPostsLikes, Recipes, Users, Favorites, Likes } = require('../../database/models')
+const { Posts, ViewPostsLikes, Recipes, Users, Favorites, Likes, Interests } = require('../../database/models')
 const { controllerWrapper } = require('../../utils/common')
 const {paginate} = require('../../database/helper')
 const {responseData} = require('./helper')
@@ -9,7 +9,7 @@ module.exports.get_posts_recipe = controllerWrapper(async (req, res) => {
     //const {order} = req.query
     const userId = req.user.id
     const pagination = req.pagination
-    const includeOpts = {include: {
+    const includeOpts = {include: [{model: Interests, as: 'Tags'}, {
         model: Posts,
         include: [
             Users,
@@ -25,7 +25,7 @@ module.exports.get_posts_recipe = controllerWrapper(async (req, res) => {
                 where: { userId }
             }
         ]
-    }}
+    }]}
     const posts = await paginate(Recipes, {...pagination, ...includeOpts})
     posts.data = posts.data.map(post => responseData(post))
     res.json(posts)
@@ -34,7 +34,7 @@ module.exports.get_posts_recipe = controllerWrapper(async (req, res) => {
 module.exports.get_posts_recipe_id = controllerWrapper(async (req, res) => {
     const {id} = req.params
     const userId = req.user.id
-    const includeOpts = {include: {
+    const includeOpts = {include: [{model: Interests, as: 'Tags'}, {
         model: Posts,
         include: [
             Users,
@@ -50,7 +50,7 @@ module.exports.get_posts_recipe_id = controllerWrapper(async (req, res) => {
                 where: { userId }
             }
         ]
-    }}
+    }]}
     const post = await Recipes.findByPk(id, includeOpts)
     if(!post) throw HttpStatusError.notFound(messages.notFound)
     res.json(responseData(post))

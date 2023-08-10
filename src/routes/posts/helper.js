@@ -9,6 +9,15 @@ module.exports.responseData = (recipe) => {
         madeBy: userResponseData(recipe.Post?.User),
         likes: recipe.Post.getLikes(),
         isLiked: recipe.Post?.Likes.length > 0,
-        isFavorite: recipe.Post?.Favorites.length > 0
+        isFavorite: recipe.Post?.Favorites.length > 0,
+        Tags: recipe.Tags ? recipe.Tags.map(tag => tagResponseData(tag)) : null
+    } : null
+}
+
+const tagResponseData = (tag) => {
+    return tag ? {
+        id: tag.id,
+        name: tag.name,
+        color: tag.color
     } : null
 }

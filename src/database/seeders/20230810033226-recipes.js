@@ -1,5 +1,5 @@
 'use strict'
-const { Users } = require('../models')
+const { Users, Interests } = require('../models')
 const { resolve } = require('path')
 const dataPath = resolve(__dirname, `${__filename}.json`)
 const data = require(dataPath)
@@ -16,8 +16,10 @@ module.exports = {
         const steps = []
         const ingredients = []
         const likes = []
+        const tags = []
         const favorites = []
         const usernameMap = {}
+        const interestMap = {}
         for(const {username, comments, reviews, likes, favorites} of data){
             usernameMap[username] = true
             for(const {username} of comments) usernameMap[username] = true
@@ -26,11 +28,19 @@ module.exports = {
             for(const username of favorites) usernameMap[username] = true
         }
         const users = await Users.findAll({where: {username: Object.keys(usernameMap)}})
+        const interests = await Interests.findAll()
+        for(const {id, name} of interests){
+            interestMap[name] = id
+        }
         for(const {id, username} of users){
             usernameMap[username] = id
         }
         for(const post of data){
             const postId = uuid()
+            const recipeTags = post.tags.map(tagName => ({
+                recipe_id: postId,
+                tag_id: interestMap[tagName]
+            }))
             const recipeLikes = post.likes.map(username => ({
                 user_id: usernameMap[username],
                 post_id: postId,
@@ -95,6 +105,7 @@ module.exports = {
             steps.push(...recipeSteps)
             likes.push(...recipeLikes)
             favorites.push(...recipeFavorites)
+            tags.push(...recipeTags)
         }
         await queryInterface.bulkInsert('posts', posts)
         await queryInterface.bulkInsert('recipes', recipes)
@@ -104,9 +115,11 @@ module.exports = {
         await queryInterface.bulkInsert('reviews', reviews)
         await queryInterface.bulkInsert('likes', likes)
         await queryInterface.bulkInsert('favorites', favorites)
+        await queryInterface.bulkInsert('recipe_tags', tags)
     },
 
     async down (queryInterface, Sequelize) {
+        await queryInterface.bulkInsert('recipe_tags', null, {})
         await queryInterface.bulkDelete('likes', null, {})
         await queryInterface.bulkDelete('favorites', null, {})
         await queryInterface.bulkDelete('comments', null, {})
