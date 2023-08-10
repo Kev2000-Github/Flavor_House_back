@@ -10,7 +10,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
         static associate(models) {
-            // define association here
+            Moments.belongsTo(models.Posts, {
+                foreignKey: 'postId'
+            })
+            Moments.belongsTo(models.ViewPosts, {
+                foreignKey: 'postId'
+            })
         }
     }
     Moments.init({
@@ -24,7 +29,15 @@ module.exports = (sequelize, DataTypes) => {
                 key: 'id'
             },
         },
-        description: DataTypes.STRING,
+        description: {
+            type: DataTypes.TEXT,
+            validate: {
+                len:{
+                    args: [10, 500],
+                    msg: 'String length is not in this range'
+                } 
+            }
+        },
         image: DataTypes.STRING
     }, {
         sequelize,

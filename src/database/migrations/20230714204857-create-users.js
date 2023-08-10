@@ -44,6 +44,9 @@ module.exports = {
                     key: 'id'
                 }
             },
+            avatar: {
+                type: Sequelize.TEXT
+            },
             step: {
                 type: Sequelize.INTEGER,
                 allowNull: false

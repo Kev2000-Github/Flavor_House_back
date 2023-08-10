@@ -5,25 +5,25 @@ const {
 const { enumFields } = require('../helper')
 const { POST_TYPE } = require('../constants')
 module.exports = (sequelize, DataTypes) => {
-    class Posts extends Model {
+    class ViewPosts extends Model {
         /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
         static associate(models) {
-            Posts.belongsTo(models.Users, {
+            ViewPosts.belongsTo(models.Users, {
                 foreignKey: 'madeBy'
             })
-            Posts.hasMany(models.Likes, {
+            ViewPosts.hasMany(models.Likes, {
                 foreignKey: 'post_id'
             })
-            Posts.hasMany(models.Favorites, {
+            ViewPosts.hasMany(models.Favorites, {
                 foreignKey: 'post_id'
             })
         }
     }
-    Posts.init({
+    ViewPosts.init({
         id: {
             allowNull: false,
             primaryKey: true,
@@ -39,13 +39,15 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         type: enumFields(DataTypes, POST_TYPE, POST_TYPE.MOMENT),
+        likes: {
+            type: DataTypes.FLOAT
+        }
     }, {
         sequelize,
-        tableName: 'posts',
-        modelName: 'Posts',
-        underscored: true,
+        tableName: 'view_posts',
+        modelName: 'ViewPosts',
         timestamps: true,
-        paranoid: true
+        underscored: true
     })
-    return Posts
+    return ViewPosts
 }

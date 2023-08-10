@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             field: 'user_id',
             allowNull: false,
+            primaryKey: true,
             references: {
                 model: 'users',
                 key: 'id'
@@ -27,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             field: 'post_id',
             allowNull: false,
+            primaryKey: true,
             references: {
                 model: 'posts',
                 key: 'id'

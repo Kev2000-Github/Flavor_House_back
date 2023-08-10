@@ -10,6 +10,7 @@ module.exports = {
             },
             user_id: {
                 type: Sequelize.STRING,
+                allowNull: false,
                 references: {
                     model: 'users',
                     key: 'id'
@@ -17,6 +18,7 @@ module.exports = {
             },
             recipe_id: {
                 type: Sequelize.STRING,
+                allowNull: false,
                 references: {
                     model: 'recipes',
                     key: 'post_id'

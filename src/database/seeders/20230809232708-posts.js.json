@@ -1,0 +1,53 @@
+[
+    {
+        "username": "AlexJ",
+        "description": "¡Recuerdos de cumpleaños inolvidables! Hoy comparto esta foto donde me hundieron la cabeza en la torta. ¡Fue un momento de diversión y risas! Gracias a todos los que hicieron de ese día un cumpleaños épico. ¡No hay mejor manera de celebrar la vida que con amigos y torta en la cara! 🎉🎂 #RecuerdosFelices #CumpleañosInolvidable #AmigosDivertidos",
+        "image": "url",
+        "likes": ["ReyDeLaCocina","MariaP","SophieH","EmiD"],
+        "favorites": ["ReyDeLaCocina","MariaP","SophieH","EmiD", "MikeS"],
+        "comments": [
+            {
+                "username": "MariaP",
+                "content": "¡Qué divertido! Parece que tuviste un cumpleaños genial lleno de risas."
+            },
+            {
+                "username": "AlexJ",
+                "content": "Jajaja, ¡eso se ve épico! Sin duda, tienes amigos increíbles para hacer de tu cumpleaños algo inolvidable."
+            },
+            {
+                "username": "EmiD",
+                "content": "¡Feliz cumpleaños atrasado! Parece que tuviste una celebración muy animada. ¡Las tortas en la cara son un clásico!"
+            }
+        ]
+    },
+    {
+        "username": "ReyDeLaCocina",
+        "description": "¡Descubriendo nuevos sabores! Hoy probé este exquisito plato y quedé fascinado. Cada bocado era una explosión de sabores y texturas. ¡No puedo esperar para compartir esta joya culinaria con ustedes! Si eres amante de la buena comida, no te lo puedes perder. ¿Alguien más se anima a probarlo? #DeliciasGastronómicas #SorprendentesSabores #ExperienciaCulinaria",
+        "image": "url",
+        "likes": ["ReyDeLaCocina","MariaP","SophieH","EmiD"],
+        "favorites": ["ReyDeLaCocina","MariaP","SophieH","EmiD"],
+        "comments": [
+            {
+                "username": "MikeS",
+                "content": "Esa presentación es impecable. ¡Seguro que fue una experiencia deliciosa para tus sentidos!"
+            },
+            {
+                "username": "EmiD",
+                "content": "Me encanta probar nuevos sabores. Este plato se ve exquisito. ¿Recomiendas algún restaurante en particular?"
+            },
+            {
+                "username": "AlexJ",
+                "content": "Definitivamente, un manjar para los amantes de la comida. ¡Qué suerte la tuya de haber disfrutado esta maravilla culinaria!"
+            },
+            {
+                "username": "SophieH",
+                "content": "¡Esto es lo que la vida trata! Explorar nuevos sabores y disfrutar de cada experiencia culinaria. ¿Hay algún ingrediente estrella en ese plato?"
+            },
+            {
+                "username": "MariaP",
+                "content": "Mis papilas gustativas están emocionadas solo de mirar esta foto. ¡Debe haber sido una experiencia increíble!"
+            }
+        ]
+        
+    }
+]

@@ -59,6 +59,9 @@ module.exports = (sequelize, DataTypes) => {
             field: 'country_id',
             type: DataTypes.STRING,
         },
+        avatar: {
+            type: DataTypes.TEXT
+        },
         step: {
             type: DataTypes.INTEGER,
             allowNull: false

@@ -1,0 +1,74 @@
+[
+    {
+        "id": "541429cb-b47b-4eb9-939e-05ed789069a1",
+        "full_name": "Juan Toledo",
+        "username": "ReyDeLaCocina",
+        "email": "Juan@gmail.com",
+        "password": "1234",
+        "sex": "MAN",
+        "phone_number": "123456789",
+        "countryISO": "VEN",
+        "step": 1,
+        "interests": ["mariscos", "asiático", "salado"]
+    },
+    {
+        "id": "8f9d45cd-6c4a-4e87-97b0-9f0ba4e3cafd",
+        "full_name": "Maria Perez",
+        "username": "MariaP",
+        "email": "Maria@gmail.com",
+        "password": "5678",
+        "sex": "WOMAN",
+        "phone_number": "987654321",
+        "countryISO": "USA",
+        "step": 1,
+        "interests": ["pasteles", "galletas", "dulce"]
+    },
+    {
+        "id": "3eac14ef-df45-4a2b-8d7a-1b825b9250d3",
+        "full_name": "Alex Johnson",
+        "username": "AlexJ",
+        "email": "Alex@gmail.com",
+        "password": "abcd",
+        "sex": "MAN",
+        "phone_number": "555666777",
+        "countryISO": "CAN",
+        "step": 1,
+        "interests": ["asiático", "sushi", "tacos"]
+    },
+    {
+        "id": "6b1f983e-9f48-4e4b-8c64-81f4289e72d7",
+        "full_name": "Emily Davis",
+        "username": "EmiD",
+        "email": "Emily@gmail.com",
+        "password": "efgh",
+        "sex": "WOMAN",
+        "phone_number": "111222333",
+        "countryISO": "GBR",
+        "step": 1,
+        "interests": ["carne", "picante"]
+    },
+    {
+        "id": "72c715b8-2565-4d87-b825-681fcf4f6b15",
+        "full_name": "Michael Smith",
+        "username": "MikeS",
+        "email": "Mike@gmail.com",
+        "password": "mnop",
+        "sex": "MAN",
+        "phone_number": "444555666",
+        "countryISO": "AUS",
+        "step": 1,
+        "interests": ["vegetariano", "pasta"]
+    },
+    {
+        "id": "f56f5d88-1e21-4df2-8f63-9d153ec2e7a0",
+        "full_name": "Sophia Hernandez",
+        "username": "SophieH",
+        "email": "Sophia@gmail.com",
+        "password": "qrst",
+        "sex": "WOMAN",
+        "phone_number": "777888999",
+        "countryISO": "MEX",
+        "step": 1,
+        "interests": ["latino", "tacos", "ceviche"]
+    }
+]
