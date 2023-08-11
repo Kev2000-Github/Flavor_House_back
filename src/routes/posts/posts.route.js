@@ -21,6 +21,14 @@ router.get(
     authentication,
     controller.get_posts_recipe_id
 )
+
+router.post(
+    '/recipe', 
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'posts.in-post-posts-recipe.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'posts.out-post-posts-recipe.schema.js'))),
+    authentication,
+    controller.post_posts_recipe
+)
 //ROUTES ABOVE --DON'T TOUCH THIS--
 module.exports = {
     postsRouter: router
