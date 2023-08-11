@@ -81,11 +81,53 @@ module.exports.post_posts_recipe = controllerWrapper(async (req, res) => {
             description,
             image: picture
         }, {transaction})
-        recipes.addTags(tags)
+        await recipes.addTags(tags, {transaction})
         await Ingredients.bulkCreate(recipeIngredients, {transaction})
         await Steps.bulkCreate(recipeSteps, {transaction})
     })
     const post = await Recipes.findByPk(postId, includeOpts(userId))
     if(!post) throw HttpStatusError.notFound(messages.notFound)
     res.json(responseData(post))
+})
+
+module.exports.put_posts_recipe_id = controllerWrapper(async (req, res) => {
+    const {title, description, tags, ingredients, steps, picture} = req.body
+    const userId = req.user.id
+    const postId = req.params.id
+    const recipe = await Recipes.findByPk(postId, {include: [
+        Ingredients,
+        Steps,
+        {model: Interests, as: 'Tags'}
+    ]})
+    if(!recipe) throw HttpStatusError.notFound(messages.notFound)
+    await sequelize.transaction(async transaction => {
+        //INGREDIENTS
+        const recipeIngredients = ingredients.map(ingredient => ({
+            id: uuid(),
+            recipeId: postId,
+            description: ingredient
+        }))
+        //STEPS
+        const recipeSteps = steps.map(step => ({
+            id: uuid(),
+            recipeId: postId,
+            description: step.description,
+            image: step.picture
+        }))
+        //GENERAL INFORMATION
+        await recipe.update({
+            name: title,
+            description,
+            image: picture
+        }, {transaction})
+        //TAGS
+        await recipe.setTags(tags, {transaction})
+        await Ingredients.destroy({where: {recipeId: postId}, transaction})
+        await Ingredients.bulkCreate(recipeIngredients, {transaction})
+        await Steps.destroy({where: {recipeId: postId}, transaction})
+        await Steps.bulkCreate(recipeSteps, {transaction})
+    })
+    const updatedPost = await Recipes.findByPk(postId, includeOpts(userId))
+    if(!updatedPost) throw HttpStatusError.notFound(messages.notFound)
+    res.json(responseData(updatedPost))
 })

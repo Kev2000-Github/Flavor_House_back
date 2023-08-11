@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         modelName: 'Ingredients',
         underscored: true,
         timestamps: true,
-        paranoid: true
+        paranoid: false
     })
     return Ingredients
 }

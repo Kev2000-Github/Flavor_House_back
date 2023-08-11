@@ -18,6 +18,12 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'recipeId',
                 as: 'Tags'
             })
+            Recipes.hasMany(models.Ingredients, {
+                foreignKey: 'recipeId'
+            })
+            Recipes.hasMany(models.Steps, {
+                foreignKey: 'recipeId'
+            })
         }
     }
     Recipes.init({
