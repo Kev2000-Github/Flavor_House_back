@@ -1,3 +1,4 @@
+const { timeDifferenceHours } = require('../../utils/common')
 const {responseDataShort: userResponseData} = require('../users/helper')
 
 module.exports.responseData = (recipe) => {
@@ -20,4 +21,10 @@ const tagResponseData = (tag) => {
         name: tag.name,
         color: tag.color
     } : null
+}
+
+module.exports.isEditable = (createdAt) => {
+    const now = new Date()
+    const hours = timeDifferenceHours(createdAt, now)
+    return hours < 24
 }

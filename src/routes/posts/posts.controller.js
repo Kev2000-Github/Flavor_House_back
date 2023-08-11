@@ -11,7 +11,7 @@ const {
     sequelize } = require('../../database/models')
 const { controllerWrapper } = require('../../utils/common')
 const {paginate} = require('../../database/helper')
-const {responseData} = require('./helper')
+const {responseData, isEditable} = require('./helper')
 const { HttpStatusError } = require('../../errors/httpStatusError')
 const {messages} = require('./messages')
 const { POST_TYPE } = require('../../database/constants')
@@ -94,12 +94,11 @@ module.exports.put_posts_recipe_id = controllerWrapper(async (req, res) => {
     const {title, description, tags, ingredients, steps, picture} = req.body
     const userId = req.user.id
     const postId = req.params.id
-    const recipe = await Recipes.findByPk(postId, {include: [
-        Ingredients,
-        Steps,
-        {model: Interests, as: 'Tags'}
-    ]})
+    const recipe = await Recipes.findByPk(postId)
     if(!recipe) throw HttpStatusError.notFound(messages.notFound)
+    if(!isEditable(recipe.createdAt)){
+        throw HttpStatusError.notFound(messages.notEditable)
+    }
     await sequelize.transaction(async transaction => {
         //INGREDIENTS
         const recipeIngredients = ingredients.map(ingredient => ({
@@ -130,4 +129,18 @@ module.exports.put_posts_recipe_id = controllerWrapper(async (req, res) => {
     const updatedPost = await Recipes.findByPk(postId, includeOpts(userId))
     if(!updatedPost) throw HttpStatusError.notFound(messages.notFound)
     res.json(responseData(updatedPost))
+})
+
+
+module.exports.delete_posts_recipe_id = controllerWrapper(async (req, res) => {
+    const postId = req.params.id
+    const recipe = await Recipes.findByPk(postId)
+    if(!recipe) throw HttpStatusError.notFound(messages.notFound)
+    await sequelize.transaction(async transaction => {
+        await recipe.setTags([], {transaction})
+        await Ingredients.destroy({where: {recipeId: postId}, transaction})
+        await Steps.destroy({where: {recipeId: postId}, transaction})
+        await recipe.destroy({transaction})
+    })
+    res.json({deleted: true})
 })
