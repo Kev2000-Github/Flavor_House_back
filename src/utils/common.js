@@ -1,6 +1,4 @@
 const bcrypt = require('bcrypt')
-const { enumArray } = require('../database/helper')
-const { ORDER } = require('../database/constants')
 
 const isJSON = (objStringified) => {
     try{
@@ -57,11 +55,6 @@ const timeDifferenceHours = (dt1, dt2) => {
     return Math.abs(Math.round(diff))
 }
 
-const formatOrder = (order) => {
-    if(enumArray(ORDER).includes(order)) return order 
-    return ORDER.DESC
-}
-
 module.exports = {
     isJSON,
     controllerWrapper,
@@ -69,6 +62,5 @@ module.exports = {
     hashPassword,
     verifyPassword,
     errorFormatter,
-    timeDifferenceHours,
-    formatOrder
+    timeDifferenceHours
 }

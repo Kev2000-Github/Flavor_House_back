@@ -8,40 +8,51 @@ const {
     Interests, 
     Ingredients,
     Steps,
-    sequelize } = require('../../database/models')
-const { controllerWrapper, formatOrder } = require('../../utils/common')
+    sequelize} = require('../../database/models')
+const { controllerWrapper } = require('../../utils/common')
 const {paginate} = require('../../database/helper')
-const {responseData, isEditable} = require('./helper')
+const {responseData, isEditable, getRecipeSearchOpts, formatOrder} = require('./helper')
 const { HttpStatusError } = require('../../errors/httpStatusError')
 const {messages} = require('./messages')
 const { POST_TYPE } = require('../../database/constants')
 const uuid = require('uuid').v4
 
-const includeOpts = (userId) => ({
-    include: [{model: Interests, as: 'Tags'}, {
-        model: Posts,
-        include: [
-            Users,
-            ViewPostsLikes,
-            {
-                model: Favorites,
-                required: false,
-                where: { userId }
-            },
-            {
-                model: Likes,
-                required: false,
-                where: { userId }
-            }
-        ]
-    }]})
+const includeOpts = (userId, tag = true) => {
+    const val =  {
+        include: [{
+            model: Posts,
+            include: [
+                Users,
+                ViewPostsLikes,
+                {
+                    model: Favorites,
+                    required: false,
+                    where: { userId }
+                },
+                {
+                    model: Likes,
+                    required: false,
+                    where: { userId }
+                }
+            ]
+        }]}
+    if(tag) val.include.push({model: Interests, as: 'Tags'})
+    return val
+}
 
 module.exports.get_posts_recipe = controllerWrapper(async (req, res) => {
-    const order = formatOrder(req.query?.order)
     const userId = req.user.id
     const pagination = req.pagination
-    const opts = {...pagination, ...includeOpts(userId)}
+    const order = formatOrder(req.query?.order)
+    let opts = await getRecipeSearchOpts(req.query?.search, req.query?.tags)
+    if(opts.include.length === 0){
+        opts = {...opts, ...includeOpts(userId)}
+    }
+    else{
+        opts.include.push((includeOpts(userId, false)).include[0])
+    }
     if(order) opts.order = [['createdAt', order]]
+    opts = {...opts, ...pagination}
     const posts = await paginate(Recipes, opts)
     posts.data = posts.data.map(post => responseData(post))
     res.json(posts)
