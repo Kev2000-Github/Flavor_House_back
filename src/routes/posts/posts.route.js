@@ -42,6 +42,7 @@ router.delete(
     '/recipe/:id', 
     validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'posts.in-delete-posts-recipe-id.schema.js'))),
     validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'posts.out-delete-posts-recipe-id.schema.js'))),
+    authentication,
     controller.delete_posts_recipe_id
 )
 //ROUTES ABOVE --DON'T TOUCH THIS--

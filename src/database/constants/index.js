@@ -14,8 +14,14 @@ const DEFAULT_PAGINATION = {
     offset: 0
 }
 
+const ORDER = {
+    DESC: 'DESC',
+    ASC: 'ASC'
+}
+
 module.exports = {
     SEX,
     POST_TYPE,
-    DEFAULT_PAGINATION
+    DEFAULT_PAGINATION,
+    ORDER
 }

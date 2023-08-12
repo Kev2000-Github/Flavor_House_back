@@ -9,7 +9,7 @@ const {
     Ingredients,
     Steps,
     sequelize } = require('../../database/models')
-const { controllerWrapper } = require('../../utils/common')
+const { controllerWrapper, formatOrder } = require('../../utils/common')
 const {paginate} = require('../../database/helper')
 const {responseData, isEditable} = require('./helper')
 const { HttpStatusError } = require('../../errors/httpStatusError')
@@ -37,11 +37,12 @@ const includeOpts = (userId) => ({
     }]})
 
 module.exports.get_posts_recipe = controllerWrapper(async (req, res) => {
-    //const {order} = req.query
+    const order = formatOrder(req.query?.order)
     const userId = req.user.id
     const pagination = req.pagination
-    
-    const posts = await paginate(Recipes, {...pagination, ...includeOpts(userId)})
+    const opts = {...pagination, ...includeOpts(userId)}
+    if(order) opts.order = [['createdAt', order]]
+    const posts = await paginate(Recipes, opts)
     posts.data = posts.data.map(post => responseData(post))
     res.json(posts)
 })
@@ -94,8 +95,9 @@ module.exports.put_posts_recipe_id = controllerWrapper(async (req, res) => {
     const {title, description, tags, ingredients, steps, picture} = req.body
     const userId = req.user.id
     const postId = req.params.id
-    const recipe = await Recipes.findByPk(postId)
+    const recipe = await Recipes.findByPk(postId, { include: [Posts] })
     if(!recipe) throw HttpStatusError.notFound(messages.notFound)
+    if(recipe.Post.madeBy !== userId) throw HttpStatusError.forbidden(messages.notOwner)
     if(!isEditable(recipe.createdAt)){
         throw HttpStatusError.notFound(messages.notEditable)
     }
@@ -134,8 +136,10 @@ module.exports.put_posts_recipe_id = controllerWrapper(async (req, res) => {
 
 module.exports.delete_posts_recipe_id = controllerWrapper(async (req, res) => {
     const postId = req.params.id
-    const recipe = await Recipes.findByPk(postId)
+    const userId = req.user.id
+    const recipe = await Recipes.findByPk(postId, { include: [Posts] })
     if(!recipe) throw HttpStatusError.notFound(messages.notFound)
+    if(recipe.Post.madeBy !== userId) throw HttpStatusError.forbidden(messages.notOwner)
     await sequelize.transaction(async transaction => {
         await recipe.setTags([], {transaction})
         await Ingredients.destroy({where: {recipeId: postId}, transaction})
