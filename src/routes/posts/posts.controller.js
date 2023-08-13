@@ -8,10 +8,11 @@ const {
     Interests, 
     Ingredients,
     Steps,
+    ViewRecipeStars,
     sequelize} = require('../../database/models')
 const { controllerWrapper } = require('../../utils/common')
 const {paginate} = require('../../database/helper')
-const {responseData, isEditable, getRecipeSearchOpts, formatOrder} = require('./helper')
+const {isEditable, getRecipeSearchOpts, formatOrder, recipeResponseData} = require('./helper')
 const { HttpStatusError } = require('../../errors/httpStatusError')
 const {messages} = require('./messages')
 const { POST_TYPE } = require('../../database/constants')
@@ -53,8 +54,9 @@ module.exports.get_posts_recipe = controllerWrapper(async (req, res) => {
     }
     if(order) opts.order = [['createdAt', order]]
     opts = {...opts, ...pagination}
+    opts.include.push(ViewRecipeStars)
     const posts = await paginate(Recipes, opts)
-    posts.data = posts.data.map(post => responseData(post))
+    posts.data = posts.data.map(post => recipeResponseData(post))
     res.json(posts)
 })
 
@@ -63,7 +65,7 @@ module.exports.get_posts_recipe_id = controllerWrapper(async (req, res) => {
     const userId = req.user.id
     const post = await Recipes.findByPk(id, includeOpts(userId))
     if(!post) throw HttpStatusError.notFound(messages.notFound)
-    res.json(responseData(post))
+    res.json(recipeResponseData(post))
 })
 
 module.exports.post_posts_recipe = controllerWrapper(async (req, res) => {
@@ -99,7 +101,7 @@ module.exports.post_posts_recipe = controllerWrapper(async (req, res) => {
     })
     const post = await Recipes.findByPk(postId, includeOpts(userId))
     if(!post) throw HttpStatusError.notFound(messages.notFound)
-    res.json(responseData(post))
+    res.json(recipeResponseData(post))
 })
 
 module.exports.put_posts_recipe_id = controllerWrapper(async (req, res) => {
@@ -141,7 +143,7 @@ module.exports.put_posts_recipe_id = controllerWrapper(async (req, res) => {
     })
     const updatedPost = await Recipes.findByPk(postId, includeOpts(userId))
     if(!updatedPost) throw HttpStatusError.notFound(messages.notFound)
-    res.json(responseData(updatedPost))
+    res.json(recipeResponseData(updatedPost))
 })
 
 

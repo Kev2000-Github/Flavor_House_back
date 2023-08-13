@@ -4,17 +4,25 @@ const { enumArray } = require('../../database/helper')
 const { ORDER } = require('../../database/constants')
 const { Interests, Sequelize }  = require('../../database/models')
 
-module.exports.responseData = (recipe) => {
+const responseData = (post) => {
+    return post ? {
+        id: post.postId,
+        description: post.description,
+        image: post.image,
+        madeBy: userResponseData(post.Post?.User),
+        likes: post.Post.getLikes(),
+        isLiked: post.Post?.Likes.length > 0,
+        isFavorite: post.Post?.Favorites.length > 0,
+    } : null
+}
+module.exports.responseData = responseData
+
+module.exports.recipeResponseData = (recipe) => {
     return recipe ? {
-        id: recipe.postId,
+        ...responseData(recipe),
         title: recipe.name,
-        description: recipe.description,
-        image: recipe.image,
-        madeBy: userResponseData(recipe.Post?.User),
-        likes: recipe.Post.getLikes(),
-        isLiked: recipe.Post?.Likes.length > 0,
-        isFavorite: recipe.Post?.Favorites.length > 0,
-        Tags: recipe.Tags ? recipe.Tags.map(tag => tagResponseData(tag)) : null
+        Tags: recipe.Tags ? recipe.Tags.map(tag => tagResponseData(tag)) : null,
+        stars: recipe.ViewRecipeStar ? Number(recipe.ViewRecipeStar.stars) : 0,
     } : null
 }
 
@@ -41,7 +49,7 @@ const formatTags = (search) => {
 
 module.exports.getRecipeSearchOpts = async (search, tags) => {
     const {like} = Sequelize.Op
-    const { or } = Sequelize
+    const { and } = Sequelize
     const formattedSearch = search ? `%${search.replaceAll('-',' ')}%` : null
     const formattedTags = formatTags(tags ?? '')
     const validTags = await Interests.findAll({where: {name: formattedTags}})
@@ -50,9 +58,12 @@ module.exports.getRecipeSearchOpts = async (search, tags) => {
     if(validTags.length > 0){
         opts.include.push({ 
             model: Interests,  
-            as: 'Tags',  
-            where: or(validTagIds.map(tagId => ({id: tagId}))),
+            where: and(validTagIds.map(tagId => ({id: tagId}))),
             required: true
+        })
+        opts.include.push({
+            model: Interests,
+            as: 'Tags'
         })
     }
     if(formattedSearch){

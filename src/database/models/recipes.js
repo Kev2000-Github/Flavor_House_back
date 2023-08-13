@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
             Recipes.belongsToMany(models.Interests, {
                 through: models.RecipeTags,
                 foreignKey: 'recipeId',
+            })
+            Recipes.belongsToMany(models.Interests, {
+                through: models.RecipeTags,
+                foreignKey: 'recipeId',
                 as: 'Tags'
             })
             Recipes.hasMany(models.Ingredients, {
@@ -23,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
             })
             Recipes.hasMany(models.Steps, {
                 foreignKey: 'recipeId'
+            })
+            Recipes.hasOne(models.ViewRecipeStars, {
+                sourceKey: 'postId',
+                foreignKey: 'postId'
             })
         }
     }
