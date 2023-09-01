@@ -1,3 +1,5 @@
+const {responseData: countryResponseData} = require('../countries/helper')
+
 module.exports.responseData = (user) => {
     return {
         id: user.id,
@@ -6,11 +8,7 @@ module.exports.responseData = (user) => {
         email: user.email,
         sex: user.sex,
         phoneNumber: user.phoneNumber,
-        Country: user.Country ? {
-            id: user.Country.id,
-            name: user.Country.name,
-            iso3: user.Country.iso3
-        } : null,
+        Country: countryResponseData(user.Country),
         Interests: user.Interests ? user.Interests.map(interest => ({
             id: interest.id,
             name: interest.name

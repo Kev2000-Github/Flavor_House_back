@@ -4,15 +4,7 @@ const { paginate } = require('../../database/helper')
 const {Interests} = require('../../database/models')
 const { HttpStatusError } = require('../../errors/httpStatusError')
 const { messages } = require('./messages')
-//const uuid = require('uuid').v4
-
-const responseData = (interest) => {
-    return {
-        id: interest.id,
-        name: interest.name,
-        imageUrl: interest.imageUrl
-    }
-}
+const { responseData } = require('./helper')
 
 module.exports.get_interests = controllerWrapper(async (req, res) => {
     const pagination = req.pagination
