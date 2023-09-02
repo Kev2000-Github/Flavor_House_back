@@ -8,7 +8,10 @@ module.exports = {
             type: 'object'
         },
         query: {
-            type: 'object'
+            type: 'object',
+            properties: {
+                additionalInfo: {type: 'string'}
+            }
         },
         headers: {
             type: 'object'

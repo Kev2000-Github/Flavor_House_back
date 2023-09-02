@@ -3,11 +3,11 @@
 module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.createTable('followers', {
-            userId: {
+            user_id: {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            followedBy: {
+            followed_by: {
                 type: Sequelize.STRING,
                 allowNull: false
             },

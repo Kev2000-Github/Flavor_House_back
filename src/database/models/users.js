@@ -19,6 +19,9 @@ module.exports = (sequelize, DataTypes) => {
             Users.belongsTo(models.Countries, {
                 foreignKey: 'country_id'
             })
+            Users.hasOne(models.ViewUserInfo, {
+                foreignKey: 'user_id'
+            })
         }
     }
     Users.init({

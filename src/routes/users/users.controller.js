@@ -1,6 +1,6 @@
 
 const { controllerWrapper } = require('../../utils/common')
-const {Users, Interests, Countries, sequelize} = require('../../database/models')
+const {Users, Interests, Countries, ViewUserInfo, sequelize} = require('../../database/models')
 const { paginate } = require('../../database/helper')
 const { HttpStatusError } = require('../../errors/httpStatusError')
 const { messages } = require('./messages')
@@ -14,7 +14,10 @@ const includeOpts = {include: [Interests, Countries]}
 
 module.exports.get_users = controllerWrapper(async (req, res) => {
     const pagination = req.pagination
-    const opts = {...pagination, ...includeOpts}
+    const additionalInfo = req.query.additionalInfo
+    const includeOptions = {include: [...includeOpts.include]}
+    if(additionalInfo) includeOptions.include.push(ViewUserInfo)
+    const opts = {...pagination, ...includeOptions}
     let users = await paginate(Users, opts)
     users.data = users.data.map(user => responseData(user))
     res.json({...users})
@@ -22,7 +25,10 @@ module.exports.get_users = controllerWrapper(async (req, res) => {
 
 module.exports.get_users_id = controllerWrapper(async (req, res) => {
     const {id} = req.params
-    const user = await Users.findByPk(id, includeOpts)
+    const additionalInfo = req.query.additionalInfo
+    const includeOptions = {include: [...includeOpts.include]}
+    if(additionalInfo) includeOptions.include.push(ViewUserInfo)
+    const user = await Users.findByPk(id, includeOptions)
     if(!user) throw HttpStatusError.notFound(messages.notFound)
     res.json({data: responseData(user)})
 })

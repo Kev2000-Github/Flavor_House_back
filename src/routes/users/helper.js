@@ -1,7 +1,7 @@
 const {responseData: countryResponseData} = require('../countries/helper')
 
 module.exports.responseData = (user) => {
-    return {
+    return user ? {
         id: user.id,
         username: user.username,
         fullName: user.fullName,
@@ -13,17 +13,27 @@ module.exports.responseData = (user) => {
             id: interest.id,
             name: interest.name
         })) : [],
+        Info: this.additionalInfoResponseData(user.ViewUserInfo),
         avatar: user.avatar,
         step: user.step
-    }
+    } : null
+}
+
+module.exports.additionalInfoResponseData = (userInfo) => {
+    return userInfo ? {
+        followers: userInfo.followers,
+        follows: userInfo.follows,
+        posts: userInfo.posts
+    } : null
 }
 
 module.exports.responseDataShort = (user) => {
-    return {
+    return user ? {
         id: user.id,
         username: user.username,
         fullName: user.fullName,
         email: user.email,
-        avatar: user.avatar
-    }
+        avatar: user.avatar,
+        Info: this.additionalInfoResponseData(user.ViewUserInfo),
+    }: null
 }

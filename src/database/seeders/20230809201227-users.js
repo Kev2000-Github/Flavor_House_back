@@ -13,6 +13,7 @@ module.exports = {
         const countryISOMap = {}
         const users = []
         const userInterests = []
+        const follows = []
         for(const {interests,countryISO} of data){
             countryISOMap[countryISO] = true
             for(const interest of interests) interestMap[interest] = true
@@ -26,7 +27,7 @@ module.exports = {
             interestMap[interest.name] = interest.id
         }
 
-        for(const {interests, countryISO, password, ...userData} of data){
+        for(const {interests, countryISO, password, follow, ...userData} of data){
             const encryptedPassword = await hashPassword(10, password)
             users.push({
                 ...userData, 
@@ -43,13 +44,23 @@ module.exports = {
                     updated_at: now
                 })
             }
+            for(const followId of follow){
+                follows.push({
+                    user_id: followId,
+                    followed_by: userData.id,
+                    created_at: now,
+                    updated_at: now
+                })
+            }
         }
         await queryInterface.bulkInsert('users', users)
         await queryInterface.bulkInsert('user_interests', userInterests)
+        await queryInterface.bulkInsert('followers', follows)
     },
 
     async down (queryInterface, Sequelize) {
-        await queryInterface.bulkDelete('users', null, {})
+        await queryInterface.bulkDelete('followers', null, {})
         await queryInterface.bulkDelete('user_interests', null, {})
+        await queryInterface.bulkDelete('users', null, {})
     }
 }

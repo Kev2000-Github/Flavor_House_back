@@ -9,6 +9,7 @@
         "phone_number": "123456789",
         "countryISO": "VEN",
         "step": 1,
+        "follow": ["3eac14ef-df45-4a2b-8d7a-1b825b9250d3", "8f9d45cd-6c4a-4e87-97b0-9f0ba4e3cafd"],
         "interests": ["mariscos", "asiático", "salado"]
     },
     {
@@ -21,6 +22,7 @@
         "phone_number": "987654321",
         "countryISO": "USA",
         "step": 1,
+        "follow": ["541429cb-b47b-4eb9-939e-05ed789069a1"],
         "interests": ["pasteles", "galletas", "dulce"]
     },
     {
@@ -33,6 +35,7 @@
         "phone_number": "555666777",
         "countryISO": "CAN",
         "step": 1,
+        "follow": ["541429cb-b47b-4eb9-939e-05ed789069a1"],
         "interests": ["asiático", "sushi", "tacos"]
     },
     {
@@ -45,6 +48,7 @@
         "phone_number": "111222333",
         "countryISO": "GBR",
         "step": 1,
+        "follow": ["541429cb-b47b-4eb9-939e-05ed789069a1"],
         "interests": ["carne", "picante"]
     },
     {
@@ -57,6 +61,7 @@
         "phone_number": "444555666",
         "countryISO": "AUS",
         "step": 1,
+        "follow": ["541429cb-b47b-4eb9-939e-05ed789069a1"],
         "interests": ["vegetariano", "pasta"]
     },
     {
@@ -69,6 +74,7 @@
         "phone_number": "777888999",
         "countryISO": "MEX",
         "step": 1,
+        "follow": ["541429cb-b47b-4eb9-939e-05ed789069a1"],
         "interests": ["latino", "tacos", "ceviche"]
     }
 ]
