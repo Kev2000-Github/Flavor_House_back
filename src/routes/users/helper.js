@@ -14,6 +14,7 @@ module.exports.responseData = (user) => {
             name: interest.name
         })) : [],
         Info: this.additionalInfoResponseData(user.ViewUserInfo),
+        isFollowed: user.isFollowed(),
         avatar: user.avatar,
         step: user.step
     } : null
@@ -35,5 +36,6 @@ module.exports.responseDataShort = (user) => {
         email: user.email,
         avatar: user.avatar,
         Info: this.additionalInfoResponseData(user.ViewUserInfo),
+        isFollowed: user.isFollowed()
     }: null
 }

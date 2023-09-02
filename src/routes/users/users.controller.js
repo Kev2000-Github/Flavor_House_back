@@ -1,6 +1,6 @@
 
 const { controllerWrapper } = require('../../utils/common')
-const {Users, Interests, Countries, ViewUserInfo, sequelize} = require('../../database/models')
+const {Users, Interests, Countries, ViewUserInfo, sequelize, Followers, Sequelize} = require('../../database/models')
 const { paginate } = require('../../database/helper')
 const { HttpStatusError } = require('../../errors/httpStatusError')
 const { messages } = require('./messages')
@@ -9,15 +9,24 @@ const uuid = require('uuid').v4
 const jwt = require('jsonwebtoken')
 const {responseData} = require('./helper')
 
-
 const includeOpts = {include: [Interests, Countries]}
 
 module.exports.get_users = controllerWrapper(async (req, res) => {
+    const { Op } = Sequelize
     const pagination = req.pagination
     const additionalInfo = req.query.additionalInfo
+    const search = req.query.search
     const includeOptions = {include: [...includeOpts.include]}
     if(additionalInfo) includeOptions.include.push(ViewUserInfo)
+    includeOptions.include.push({
+        model: Followers,
+        where: {followedBy: req.user.id},
+        required: false
+    })
     const opts = {...pagination, ...includeOptions}
+    if(search) opts.where = { username: {
+        [Op.like]: `%${search}%`
+    } }
     let users = await paginate(Users, opts)
     users.data = users.data.map(user => responseData(user))
     res.json({...users})

@@ -22,6 +22,13 @@ module.exports = (sequelize, DataTypes) => {
             Users.hasOne(models.ViewUserInfo, {
                 foreignKey: 'user_id'
             })
+            Users.hasMany(models.Followers, {
+                foreignKey: 'user_id'
+            })
+            Users.hasMany(models.Followers, {
+                foreignKey: 'followed_by',
+                as: 'Follows'
+            })
         }
     }
     Users.init({
@@ -89,5 +96,13 @@ module.exports = (sequelize, DataTypes) => {
             }
         }
     })
+    Users.prototype.isFollowed = function() {
+        try{
+            return this.Followers.length > 0
+        }
+        catch(err){
+            return false
+        }
+    }
     return Users
 }

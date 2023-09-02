@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     Followers.init({
         userId: {
             type: DataTypes.STRING,
+            primaryKey: true,
             field: 'user_id',
             allowNull: false,
             references: {
@@ -25,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         followedBy: {
             type: DataTypes.STRING,
+            primaryKey: true,
             field: 'followed_by',
             allowNull: false,
             references: {
