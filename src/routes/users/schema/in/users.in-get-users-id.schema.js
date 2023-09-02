@@ -13,7 +13,8 @@ module.exports = {
         query: {
             type: 'object',
             properties: {
-                additionalInfo: {type: 'string'}
+                additionalInfo: {type: 'string'},
+                checkFollow: {type: 'string'},
             }
         },
         headers: {

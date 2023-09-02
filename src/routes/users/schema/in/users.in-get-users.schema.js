@@ -10,7 +10,11 @@ module.exports = {
         query: {
             type: 'object',
             properties: {
-                additionalInfo: {type: 'string'}
+                additionalInfo: {type: 'string'},
+                checkFollow: {type: 'string'},
+                search: {type: 'string'},
+                limit: {type: 'string'},
+                page: {type: 'string'},
             }
         },
         headers: {

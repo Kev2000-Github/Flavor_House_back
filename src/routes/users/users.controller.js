@@ -11,18 +11,26 @@ const {responseData} = require('./helper')
 
 const includeOpts = {include: [Interests, Countries]}
 
+const commonQueryURLIncludeOptions = (params, userId) => {
+    const additionalInfo = params.additionalInfo
+    const checkFollow = params.checkFollow
+    const includeOptions = {include: [...includeOpts.include]}
+    if(additionalInfo) includeOptions.include.push(ViewUserInfo)
+    if(checkFollow) {
+        includeOptions.include.push({
+            model: Followers,
+            where: {followedBy: userId},
+            required: false
+        })
+    }
+    return includeOptions
+}
+
 module.exports.get_users = controllerWrapper(async (req, res) => {
     const { Op } = Sequelize
     const pagination = req.pagination
-    const additionalInfo = req.query.additionalInfo
     const search = req.query.search
-    const includeOptions = {include: [...includeOpts.include]}
-    if(additionalInfo) includeOptions.include.push(ViewUserInfo)
-    includeOptions.include.push({
-        model: Followers,
-        where: {followedBy: req.user.id},
-        required: false
-    })
+    const includeOptions = commonQueryURLIncludeOptions(req.query, req.user.id)
     const opts = {...pagination, ...includeOptions}
     if(search) opts.where = { username: {
         [Op.like]: `%${search}%`
@@ -34,9 +42,7 @@ module.exports.get_users = controllerWrapper(async (req, res) => {
 
 module.exports.get_users_id = controllerWrapper(async (req, res) => {
     const {id} = req.params
-    const additionalInfo = req.query.additionalInfo
-    const includeOptions = {include: [...includeOpts.include]}
-    if(additionalInfo) includeOptions.include.push(ViewUserInfo)
+    const includeOptions = commonQueryURLIncludeOptions(req.query, req.user.id)
     const user = await Users.findByPk(id, includeOptions)
     if(!user) throw HttpStatusError.notFound(messages.notFound)
     res.json({data: responseData(user)})
@@ -90,4 +96,20 @@ module.exports.delete_users = controllerWrapper(async (req, res) => {
     if(!user) throw HttpStatusError.notFound(messages.notFound)
     await user.destroy()
     res.json({data: responseData(user)})
+})
+
+module.exports.post_users_follow_id = controllerWrapper(async (req, res) => {
+    const {id} = req.params
+    const {follow} = req.body
+    const userId = req.user.id
+    const user = await Users.findByPk(id)
+    if(!user) throw HttpStatusError.notFound(messages.notFound)    
+    const follower = await Followers.findOne({where: {userId: id, followedBy: userId}})
+    if(follow && !follower){
+        await Followers.create({userId: id, followedBy: userId})
+    }
+    else if(!follow && follower){
+        await follower.destroy({force: true})
+    }
+    res.json({data: {follow}})
 })

@@ -46,6 +46,14 @@ router.delete(
     controller.delete_users
 )
 
+
+router.post(
+    '/follow/:id', 
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'users.in-post-users-follow-id.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'users.out-post-users-follow-id.schema.js'))),
+    authentication,
+    controller.post_users_follow_id
+)
 //ROUTES ABOVE --DON'T TOUCH THIS--
 module.exports = {
     usersRouter: router
