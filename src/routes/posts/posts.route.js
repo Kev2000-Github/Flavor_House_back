@@ -45,6 +45,51 @@ router.delete(
     authentication,
     controller.delete_posts_recipe_id
 )
+
+
+// moment routes
+
+router.get(
+    '/moment',
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'posts.in-get-posts-moment-query.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'posts.out-get-posts-moment-query.schema.js'))),
+    authentication,
+    paginationConfig,
+    controller.get_posts_moment
+)
+
+router.get(
+    '/moment/:id',
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'posts.in-get-posts-moment-id.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'posts.out-get-posts-moment-id.schema.js'))),
+    authentication,
+    controller.get_posts_moment_id
+)
+
+router.post(
+    '/moment',
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'posts.in-post-posts-moment.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'posts.out-post-posts-moment.schema.js'))),
+    authentication,
+    controller.post_posts_moment
+)
+
+router.put(
+    '/moment/:id',
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'posts.in-put-posts-moment-id.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'posts.out-put-posts-moment-id.schema.js'))),
+    authentication,
+    controller.put_posts_moment_id
+)
+
+router.delete(
+    '/moment/:id',
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'posts.in-delete-posts-moment.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'posts.out-delete-posts-moment.schema.js'))),
+    authentication,
+    controller.delete_posts_moment_id
+)
+
 //ROUTES ABOVE --DON'T TOUCH THIS--
 module.exports = {
     postsRouter: router

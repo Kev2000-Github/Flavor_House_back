@@ -2,6 +2,7 @@ const {
     Posts, 
     ViewPostsLikes, 
     Recipes, 
+    Moments,
     Users, 
     Favorites, 
     Likes, 
@@ -159,5 +160,91 @@ module.exports.delete_posts_recipe_id = controllerWrapper(async (req, res) => {
         await Steps.destroy({where: {recipeId: postId}, transaction})
         await recipe.destroy({transaction})
     })
+    res.json({deleted: true})
+})
+
+
+//moments
+
+module.exports.get_posts_moment = controllerWrapper(async (req, res) => {
+    const userId = req.user.id
+
+    const pagination = req.pagination
+    const order = formatOrder(req.query?.order)
+    let opts = { ...includeOpts(userId,false), pagination}
+    if(order) opts.order = [['createdAt', order]]
+    const moments = await paginate(Moments, opts)
+    res.json(moments)
+})
+
+module.exports.get_posts_moment_id = controllerWrapper(async (req, res) => {
+  
+    const userId = req.user.id
+    const postId = req.params.id
+    const moment = await Moments.findByPk(postId, includeOpts(userId,false))
+    if(!moment) throw HttpStatusError.notFound(messages.notFound)
+    res.json(moment)  // Or use the momentResponseData function if you have one
+})
+
+module.exports.post_posts_moment = controllerWrapper(async (req, res) => {
+    const {description, image} = req.body
+    const userId = req.user.id
+    const postId = uuid()
+
+    await sequelize.transaction(async transaction => {
+        await Posts.create({
+            id: postId,
+            madeBy: userId,
+            type: POST_TYPE.MOMENT
+        }, {transaction})
+
+        await Moments.create({
+            postId,
+            description,
+            image
+        }, {transaction})
+    })
+
+    const moment = await Moments.findByPk(postId, includeOpts(userId,false))
+    if(!moment) throw HttpStatusError.notFound(messages.notFound)
+    res.json(moment)  // Or use the momentResponseData function
+})
+
+module.exports.put_posts_moment_id = controllerWrapper(async (req, res) => {
+    const {description, image} = req.body
+    const userId = req.user.id
+    const postId = req.params.id
+    const moment = await Moments.findByPk(postId, { include: [Posts] })
+
+    if(!moment) throw HttpStatusError.notFound(messages.notFound)
+    if(moment.Post.madeBy !== userId) throw HttpStatusError.forbidden(messages.notOwner)
+    if(!isEditable(moment.createdAt)){
+        throw HttpStatusError.notFound(messages.notEditable)
+    }
+
+    await sequelize.transaction(async transaction => {
+        await moment.update({
+            description,
+            image
+        }, {transaction})
+    })
+
+    const updatedMoment = await Moments.findByPk(postId, includeOpts(userId,false))
+    if(!updatedMoment) throw HttpStatusError.notFound(messages.notFound)
+    res.json(updatedMoment)  // Or use the momentResponseData function
+})
+
+module.exports.delete_posts_moment_id = controllerWrapper(async (req, res) => {
+    const postId = req.params.id
+    const userId = req.user.id
+    const moment = await Moments.findByPk(postId, { include: [Posts] })
+
+    if(!moment) throw HttpStatusError.notFound(messages.notFound)
+    if(moment.Post.madeBy !== userId) throw HttpStatusError.forbidden(messages.notOwner)
+
+    await sequelize.transaction(async transaction => {
+        await moment.destroy({transaction})
+    })
+
     res.json({deleted: true})
 })
