@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
     Comments.init({
+        id: {
+            allowNull: false,
+            primaryKey: true,
+            type: DataTypes.UUIDV4
+        },
         userId: {
             type: DataTypes.STRING,
             field: 'user_id',
