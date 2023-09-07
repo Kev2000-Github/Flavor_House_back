@@ -8,6 +8,7 @@ router.use('/posts', require('./posts/posts.route').postsRouter)
 router.use('/countries', require('./countries/countries.route').countriesRouter)
 router.use('/comments', require('./comments/comments.route').commentsRouter)
 router.use('/reviews', require('./reviews/reviews.route').reviewsRouter)
+router.use('/logins', require('./logins/logins.route').loginsRouter)
 //SEPARATOR --DON'T TOUCH THIS--
 module.exports = {
     router
