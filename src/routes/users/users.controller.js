@@ -1,6 +1,6 @@
 
 const { controllerWrapper } = require('../../utils/common')
-const {Users, Interests, Countries, ViewUserInfo, sequelize, Followers, Sequelize} = require('../../database/models')
+const {Users, Interests, Countries, ViewUserInfo, sequelize, Followers, Sequelize,RecoveryCodes} = require('../../database/models')
 const { paginate } = require('../../database/helper')
 const { HttpStatusError } = require('../../errors/httpStatusError')
 const { messages } = require('./messages')
@@ -113,3 +113,56 @@ module.exports.post_users_follow_id = controllerWrapper(async (req, res) => {
     }
     res.json({data: {follow}})
 })
+
+
+module.exports.get_users_OTP = controllerWrapper(async (req, res) => {
+    const {email} = req.body
+    const user = await Users.findOne({where:{email}})
+    if(!user) throw HttpStatusError.notFound(messages.notFound)
+
+    await RecoveryCodes.create({
+        id: uuid(),
+        email,
+        code: Math.floor((Math.random() * (999999 - 100000 + 1)) + 100000)
+    })
+
+
+
+    res.json({data:email})
+})
+
+module.exports.post_users_OTP = controllerWrapper(async (req, res) => {
+    const {email,code} = req.body
+
+    const recovery = await RecoveryCodes.findOne({where:{email,code}})
+    if(!recovery) throw HttpStatusError.notFound(messages.recoveryNotFound)
+    await recovery.destroy()
+
+    const user = await Users.findOne({where:{email}})
+    const data = responseData(user)
+    const token = jwt.sign(
+        data,
+        config.JWT_TOKEN,
+        {
+            expiresIn: '7d',
+        }
+    )
+    res.json({data, token})
+
+})
+
+
+module.exports.put_users_OTP = controllerWrapper(async (req, res) => {
+    const {password} = req.body
+    const {id} = req.user
+
+    const user = await Users.findByPk(id)
+    if(!user) throw HttpStatusError.notFound(messages.notFound)
+
+    await user.update({password})
+
+    res.json({data:true})
+
+})
+
+
