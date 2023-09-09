@@ -9,6 +9,8 @@ ajv.addFormat('password', /^[a-zA-Z0-9_@#$%^*()-]{8,}$/)
 ajv.addFormat('fullName', /^[a-zA-Z]+( [a-zA-Z]+)*$/)
 //no spaces in username
 ajv.addFormat('username', /^[a-zA-Z0-9_@#$%^*()-]+$/)
+//only number code
+ajv.addFormat('recoverycode', /^\d{6}$/)
 addErrors(ajv)
 
 module.exports = {

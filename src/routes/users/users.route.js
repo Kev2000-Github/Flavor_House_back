@@ -7,6 +7,28 @@ const {validateRequestSchema, validateResponseSchema, authentication} = require(
 const { paginationConfig } = require('../../middlewares/paginationConfig')
 
 router.get(
+    '/OTP', 
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'users.in-get-users-otp.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'users.out-get-users-otp.schema.js'))),
+    controller.get_users_OTP
+)
+
+router.put(
+    '/OTP', 
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'users.in-put-users-otp.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'users.out-put-users-otp.schema.js'))),
+    authentication,
+    controller.put_users_OTP
+)
+
+router.post(
+    '/OTP', 
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'users.in-post-users-otp.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'users.out-post-users-otp.schema.js'))),
+    controller.post_users_OTP
+)
+
+router.get(
     '/', 
     validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'users.in-get-users.schema.js'))),
     validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'users.out-get-users.schema.js'))),
@@ -54,6 +76,8 @@ router.post(
     authentication,
     controller.post_users_follow_id
 )
+
+
 //ROUTES ABOVE --DON'T TOUCH THIS--
 module.exports = {
     usersRouter: router
