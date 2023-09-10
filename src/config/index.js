@@ -16,5 +16,12 @@ addErrors(ajv)
 module.exports = {
     PORT: process.env.PORT ?? 3000,
     JWT_TOKEN: process.env.JWT_PRIVATE_TOKEN ?? 'private_key',
-    ajv: ajv
+    ajv: ajv,
+    mail: {
+        service: process.env.EMAIL_SERVICE,
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+        sender: process.env.EMAIL_SENDER,
+        from: process.env.EMAIL_FROM
+    }
 }

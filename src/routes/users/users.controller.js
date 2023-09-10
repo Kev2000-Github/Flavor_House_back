@@ -1,5 +1,5 @@
 
-const { controllerWrapper } = require('../../utils/common')
+const { controllerWrapper, genRandomNumber } = require('../../utils/common')
 const {Users, Interests, Countries, ViewUserInfo, sequelize, Followers, Sequelize,RecoveryCodes} = require('../../database/models')
 const { paginate } = require('../../database/helper')
 const { HttpStatusError } = require('../../errors/httpStatusError')
@@ -8,6 +8,7 @@ const config = require('../../config')
 const uuid = require('uuid').v4
 const jwt = require('jsonwebtoken')
 const {responseData} = require('./helper')
+const { sendMail } = require('../../mailer')
 
 const includeOpts = {include: [Interests, Countries]}
 
@@ -119,15 +120,17 @@ module.exports.get_users_OTP = controllerWrapper(async (req, res) => {
     const {email} = req.body
     const user = await Users.findOne({where:{email}})
     if(!user) throw HttpStatusError.notFound(messages.notFound)
-
+    const code = genRandomNumber(999999, 100000)
     await RecoveryCodes.create({
         id: uuid(),
         email,
-        code: Math.floor((Math.random() * (999999 - 100000 + 1)) + 100000)
+        code
     })
-
-
-
+    sendMail(
+        email, 
+        'Recuperación de Contraseña | Flavor House',
+        `Codigo de Recuperación: ${code}`
+    )
     res.json({data:email})
 })
 
