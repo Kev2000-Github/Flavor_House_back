@@ -60,6 +60,22 @@ router.delete(
     controller.delete_posts_recipe_id
 )
 
+
+router.post(
+    '/favorite/:id', 
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'posts.in-post-posts-favorite-id.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'posts.out-post-posts-favorite-id.schema.js'))),
+    authentication,
+    controller.post_posts_favorite_id
+)
+
+router.post(
+    '/like/:id', 
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'posts.in-post-posts-like-id.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'posts.out-post-posts-like-id.schema.js'))),
+    authentication,
+    controller.post_posts_like_id
+)
 //ROUTES ABOVE --DON'T TOUCH THIS--
 module.exports = {
     postsRouter: router

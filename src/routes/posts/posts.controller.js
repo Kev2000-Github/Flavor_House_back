@@ -185,3 +185,59 @@ module.exports.get_posts_recipe_ingredients_id = controllerWrapper(async (req, r
     const ingredients = post.Ingredients.map(ingredient => ingredientResponseData(ingredient))
     res.json({data: ingredients})
 })
+
+
+module.exports.post_posts_favorite_id = controllerWrapper(async (req, res) => {
+    const userId = req.user.id
+    const id = req.params.id
+    const {isFavorite} = req.body
+    const opts = {
+        include: [
+            {
+                model: Favorites,
+                required: false,
+                where: { userId }
+            }
+        ]
+    }
+    const post = await Posts.findByPk(id, opts)
+    if(!post) throw HttpStatusError.notFound(messages.notFound)
+    if(isFavorite && post.Favorites.length === 0){
+        await Favorites.create({
+            userId,
+            postId: id
+        })
+    }
+    else if(!isFavorite && post.Favorites.length > 0){
+        await Favorites.destroy({where: {userId, postId: id}})
+    }
+    res.json({data: isFavorite})
+})
+
+
+module.exports.post_posts_like_id = controllerWrapper(async (req, res) => {
+    const userId = req.user.id
+    const id = req.params.id
+    const {isLiked} = req.body
+    const opts = {
+        include: [
+            {
+                model: Likes,
+                required: false,
+                where: { userId }
+            }
+        ]
+    }
+    const post = await Posts.findByPk(id, opts)
+    if(!post) throw HttpStatusError.notFound(messages.notFound)
+    if(isLiked && post.Likes.length === 0){
+        await Likes.create({
+            userId,
+            postId: id
+        })
+    }
+    else if(!isLiked && post.Likes.length > 0){
+        await Likes.destroy({where: {userId, postId: id}})
+    }
+    res.json({data: isLiked})
+})
