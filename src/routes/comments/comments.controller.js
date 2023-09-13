@@ -1,17 +1,20 @@
 
 const { controllerWrapper } = require('../../utils/common')
-const {Comments} = require('../../database/models')
+const {Comments, Users} = require('../../database/models')
 const { paginate } = require('../../database/helper')
 const { responseData } = require('./helper')
 const { HttpStatusError } = require('../../errors/httpStatusError')
 const messages = require('./messages')
 const uuid = require('uuid').v4
 
-
-
 module.exports.get_comments = controllerWrapper(async (req, res) => {
+    const postId = req.params.postId
     const pagination = req.pagination
-    const opts = {...pagination}
+    const opts = {
+        where: {postId},
+        include: [Users],
+        ...pagination
+    }
     let comments = await paginate(Comments, opts)
     comments.data = comments.data.map(interest => responseData(interest))
     res.json({...comments})

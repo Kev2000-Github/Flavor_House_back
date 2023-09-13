@@ -1,5 +1,5 @@
 
-const {Reviews} = require('../../database/models')
+const {Reviews, Users} = require('../../database/models')
 const { HttpStatusError } = require('../../errors/httpStatusError')
 const { paginate } = require('../../database/helper')
 const { controllerWrapper } = require('../../utils/common')
@@ -8,11 +8,14 @@ const { messages } = require('../reviews/messages')
 const uuid = require('uuid').v4
 const { responseData } = require('./helper')
 
-
-
 module.exports.get_reviews = controllerWrapper(async (req, res) => {
     const pagination = req.pagination
-    const opts = {...pagination}
+    const recipeId = req.params.recipeId
+    const opts = {
+        where: {recipeId},
+        ...pagination,
+        include: [Users]
+    }
     let review = await paginate(Reviews, opts)
     review.data = review.data.map(interest => responseData(interest))
     res.json({...review})
@@ -21,7 +24,6 @@ module.exports.get_reviews = controllerWrapper(async (req, res) => {
 module.exports.put_reviews_id = controllerWrapper(async (req, res) => {
     const {id}= req.params
     const {content,stars} = req.body
-
     const review = await Reviews.findByPk(id)
     if(!review) throw HttpStatusError.notFound(messages.notFound)
 

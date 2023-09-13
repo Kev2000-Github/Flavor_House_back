@@ -6,7 +6,7 @@ const controller = require('./comments.controller')
 const {validateRequestSchema, validateResponseSchema, authentication,paginationConfig} = require('../../middlewares')
 
 router.get(
-    '/', 
+    '/:postId', 
     validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'comments.in-get-comments.schema.js'))),
     validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'comments.out-get-comments.schema.js'))),
     authentication,

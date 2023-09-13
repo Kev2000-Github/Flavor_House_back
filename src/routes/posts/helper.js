@@ -26,6 +26,21 @@ module.exports.recipeResponseData = (recipe) => {
     } : null
 }
 
+module.exports.ingredientResponseData = (ingredient) => {
+    return ingredient ? {
+        id: ingredient.id,
+        description: ingredient.description
+    } : null
+}
+
+module.exports.stepResponseData = (step) => {
+    return step ? {
+        id: step.id,
+        description: step.description,
+        image: step.image
+    } : null
+}
+
 const tagResponseData = (tag) => {
     return tag ? {
         id: tag.id,

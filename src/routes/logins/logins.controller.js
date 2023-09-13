@@ -1,4 +1,4 @@
-const {Users} = require('../../database/models')
+const {Users, Countries} = require('../../database/models')
 const { messages } = require('./messages')
 const config = require('../../config')
 const jwt = require('jsonwebtoken')
@@ -10,7 +10,7 @@ module.exports.post_logins = controllerWrapper(async (req, res) => {
 
     const {email,password} = req.body
 
-    const user = await Users.findOne({where:{email}})
+    const user = await Users.findOne({where:{email}, include: [Countries] })
     if(!user) throw HttpStatusError.notFound(messages.notFound)
     
     if (!(await verifyPassword(password,user.password))) throw HttpStatusError.notFound(messages.notFound)

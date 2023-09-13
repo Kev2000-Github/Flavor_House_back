@@ -15,6 +15,20 @@ router.get(
 )
 
 router.get(
+    '/recipe/steps/:id', 
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'posts.in-get-posts-recipe-steps-id.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'posts.out-get-posts-recipe-steps-id.schema.js'))),
+    controller.get_posts_recipe_steps_id
+)
+
+router.get(
+    '/recipe/ingredients/:id', 
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'posts.in-get-posts-recipe-ingredients-id.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'posts.out-get-posts-recipe-ingredients-id.schema.js'))),
+    controller.get_posts_recipe_ingredients_id
+)
+
+router.get(
     '/recipe/:id', 
     validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'posts.in-get-posts-recipe-id.schema.js'))),
     validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'posts.out-get-posts-recipe-id.schema.js'))),
@@ -45,6 +59,7 @@ router.delete(
     authentication,
     controller.delete_posts_recipe_id
 )
+
 //ROUTES ABOVE --DON'T TOUCH THIS--
 module.exports = {
     postsRouter: router

@@ -83,7 +83,7 @@ module.exports.put_users = controllerWrapper(async (req, res) => {
         let user = await Users.findByPk(id)
         if(!user) throw HttpStatusError.notFound(messages.notFound)    
         await user.update({ ...userInfo, step: 1 }, {transaction})
-        await user.setInterests(interests, {transaction})
+        if(interests) await user.setInterests(interests, {transaction})
     })
     const user = await Users.findByPk(id, includeOpts)
     res.json({data: responseData(user)})

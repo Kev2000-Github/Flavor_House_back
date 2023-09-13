@@ -12,7 +12,7 @@ const {
     sequelize} = require('../../database/models')
 const { controllerWrapper } = require('../../utils/common')
 const {paginate} = require('../../database/helper')
-const {isEditable, getRecipeSearchOpts, formatOrder, recipeResponseData} = require('./helper')
+const {isEditable, getRecipeSearchOpts, formatOrder, recipeResponseData, ingredientResponseData, stepResponseData} = require('./helper')
 const { HttpStatusError } = require('../../errors/httpStatusError')
 const {messages} = require('./messages')
 const { POST_TYPE } = require('../../database/constants')
@@ -160,4 +160,28 @@ module.exports.delete_posts_recipe_id = controllerWrapper(async (req, res) => {
         await recipe.destroy({transaction})
     })
     res.json({deleted: true})
+})
+
+
+module.exports.get_posts_recipe_steps_id = controllerWrapper(async (req, res) => {
+    const {id} = req.params
+    const opts = {
+        include: [Steps]
+    }
+    const post = await Recipes.findByPk(id, opts)
+    if(!post) throw HttpStatusError.notFound(messages.notFound)
+    const steps = post.Steps.map(step => stepResponseData(step))
+    res.json({data: steps})
+})
+
+
+module.exports.get_posts_recipe_ingredients_id = controllerWrapper(async (req, res) => {
+    const {id} = req.params
+    const opts = {
+        include: [Ingredients]
+    }
+    const post = await Recipes.findByPk(id, opts)
+    if(!post) throw HttpStatusError.notFound(messages.notFound)
+    const ingredients = post.Ingredients.map(ingredient => ingredientResponseData(ingredient))
+    res.json({data: ingredients})
 })

@@ -6,7 +6,7 @@ const controller = require('./reviews.controller')
 const {validateRequestSchema, validateResponseSchema, authentication,paginationConfig} = require('../../middlewares')
 
 router.get(
-    '/', 
+    '/:recipeId', 
     validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'reviews.in-get-reviews.schema.js'))),
     validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'reviews.out-get-reviews.schema.js'))),
     authentication,
