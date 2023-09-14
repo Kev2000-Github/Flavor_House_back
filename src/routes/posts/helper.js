@@ -10,7 +10,7 @@ const responseData = (post) => {
         description: post.description,
         image: post.image,
         madeBy: userResponseData(post.Post?.User),
-        // likes: post.Post.getLikes(),
+        likes: post.Post.getLikes(),
         isLiked: post.Post?.Likes.length > 0,
         isFavorite: post.Post?.Favorites.length > 0,
     } : null
