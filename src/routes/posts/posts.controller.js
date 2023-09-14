@@ -19,6 +19,7 @@ const {
     getRecipeSearchOpts,
     formatOrder,
     recipeResponseData,
+    responseData,
 } = require('./helper')
 const { HttpStatusError } = require('../../errors/httpStatusError')
 const { messages } = require('./messages')
@@ -191,7 +192,7 @@ module.exports.get_posts_moment = controllerWrapper(async (req, res) => {
     let opts = { ...includeOpts(userId, false), ...pagination }
     if (order) opts.order = [['createdAt', order]]
     const moments = await paginate(Moments, opts)
-    moments.data = moments.data.map(post => recipeResponseData(post)) 
+    moments.data = moments.data.map(post => responseData(post)) 
     res.json(moments)
  
 })
@@ -201,7 +202,7 @@ module.exports.get_posts_moment_id = controllerWrapper(async (req, res) => {
     const postId = req.params.id
     const moment = await Moments.findByPk(postId, includeOpts(userId, false))
     if (!moment) throw HttpStatusError.notFound(messages.notFound)
-    moment.data = recipeResponseData(moment)
+    moment.data = responseData(moment)
     res.json(moment)
 })
 
@@ -232,7 +233,7 @@ module.exports.post_posts_moment = controllerWrapper(async (req, res) => {
 
     const moment = await Moments.findByPk(postId, includeOpts(userId, false))
     if (!moment) throw HttpStatusError.notFound(messages.notFound)
-    moment.data = recipeResponseData(moment)
+    moment.data = responseData(moment)
     res.json(moment)
 })
 
@@ -263,7 +264,7 @@ module.exports.put_posts_moment_id = controllerWrapper(async (req, res) => {
         includeOpts(userId, false)
     )
     if (!updatedMoment) throw HttpStatusError.notFound(messages.notFound)
-    updatedMoment.data = recipeResponseData(updatedMoment)
+    updatedMoment.data = responseData(updatedMoment)
     res.json(updatedMoment) // Or use the momentResponseData function
 })
 
