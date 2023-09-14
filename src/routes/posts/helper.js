@@ -13,6 +13,7 @@ const responseData = (post) => {
         likes: post.Post.getLikes(),
         isLiked: post.Post?.Likes.length > 0,
         isFavorite: post.Post?.Favorites.length > 0,
+        createdAt: post.Post.createdAt
     } : null
 }
 module.exports.responseData = responseData
