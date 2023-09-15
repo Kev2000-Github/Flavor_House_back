@@ -3,20 +3,20 @@
         "username": "AlexJ",
         "title": "Title",
         "description": "¡Descubriendo nuevos sabores! Hoy probé este exquisito plato y quedé fascinado. Cada bocado era una explosión de sabores y texturas. ¡No puedo esperar para compartir esta joya culinaria con ustedes! Si eres amante de la buena comida, no te lo puedes perder. ¿Alguien más se anima a probarlo? #DeliciasGastronómicas #SorprendentesSabores #ExperienciaCulinaria",
-        "image": "sample",
+        "image": null,
         "tags": ["dulce", "pasteles"],
         "ingredients": ["1/2 taza de leche", "1 taza de harina", "1/2 taza de azúcar", "1/4 taza de cacao en polvo sin azúcar", "1 cucharadita de polvo de hornear", "1/2 cucharadita de bicarbonato de sodio", "1/2 cucharadita de sal", "1/2 taza de aceite vegetal", "1 huevo", "1 cucharadita de extracto de vainilla"],
         "steps": [
-            { "image": "url", "description": "Precalienta el horno a 180°C (350°F)." },
-            { "image": "url", "description": "Engrasa y enharina un molde para pastel." },
-            { "image": "url", "description": "En un tazón grande, mezcla la harina, el azúcar, el cacao en polvo, el polvo de hornear, el bicarbonato de sodio y la sal." },
-            { "image": "url", "description": "Añade la leche, el aceite vegetal, el huevo y el extracto de vainilla a la mezcla seca." },
-            { "image": "url", "description": "Bate la mezcla con una batidora eléctrica a velocidad media hasta que esté suave y bien combinada." },
-            { "image": "url", "description": "Vierte la masa en el molde preparado, asegurándote de nivelar la superficie." },
-            { "image": "url", "description": "Hornea en el horno precalentado durante 25-30 minutos, o hasta que al insertar un palillo en el centro, este salga limpio." },
-            { "image": "url", "description": "Saca el pastel del horno y deja enfriar en el molde durante unos 10 minutos." },
-            { "image": "url", "description": "Desmolda el pastel y colócalo sobre una rejilla para que se enfríe completamente." },
-            { "image": "url", "description": "Una vez que el pastel esté completamente frío, puedes decorarlo con glaseado, crema batida o frutas antes de servir." }
+            { "image": null, "description": "Precalienta el horno a 180°C (350°F)." },
+            { "image": null, "description": "Engrasa y enharina un molde para pastel." },
+            { "image": null, "description": "En un tazón grande, mezcla la harina, el azúcar, el cacao en polvo, el polvo de hornear, el bicarbonato de sodio y la sal." },
+            { "image": null, "description": "Añade la leche, el aceite vegetal, el huevo y el extracto de vainilla a la mezcla seca." },
+            { "image": null, "description": "Bate la mezcla con una batidora eléctrica a velocidad media hasta que esté suave y bien combinada." },
+            { "image": null, "description": "Vierte la masa en el molde preparado, asegurándote de nivelar la superficie." },
+            { "image": null, "description": "Hornea en el horno precalentado durante 25-30 minutos, o hasta que al insertar un palillo en el centro, este salga limpio." },
+            { "image": null, "description": "Saca el pastel del horno y deja enfriar en el molde durante unos 10 minutos." },
+            { "image": null, "description": "Desmolda el pastel y colócalo sobre una rejilla para que se enfríe completamente." },
+            { "image": null, "description": "Una vez que el pastel esté completamente frío, puedes decorarlo con glaseado, crema batida o frutas antes de servir." }
         ]
         ,
         "reviews": [
