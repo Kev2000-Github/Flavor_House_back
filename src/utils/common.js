@@ -55,6 +55,14 @@ const timeDifferenceHours = (dt1, dt2) => {
     return Math.abs(Math.round(diff))
 }
 
+const genRandomNumber = (top, bottom) => {
+    return Math.floor((Math.random() * (top - bottom + 1)) + bottom)
+}
+
+const removeExtension = (fileName) => {
+    return fileName.replace(/.\w+$/, '')
+}
+
 module.exports = {
     isJSON,
     controllerWrapper,
@@ -62,5 +70,7 @@ module.exports = {
     hashPassword,
     verifyPassword,
     errorFormatter,
-    timeDifferenceHours
+    timeDifferenceHours,
+    genRandomNumber,
+    removeExtension
 }

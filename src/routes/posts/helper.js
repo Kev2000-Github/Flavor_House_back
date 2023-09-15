@@ -13,6 +13,7 @@ const responseData = (post) => {
         likes: post.Post.getLikes(),
         isLiked: post.Post?.Likes.length > 0,
         isFavorite: post.Post?.Favorites.length > 0,
+        createdAt: post.Post.createdAt
     } : null
 }
 module.exports.responseData = responseData
@@ -23,6 +24,21 @@ module.exports.recipeResponseData = (recipe) => {
         title: recipe.name,
         Tags: recipe.Tags ? recipe.Tags.map(tag => tagResponseData(tag)) : null,
         stars: recipe.ViewRecipeStar ? Number(recipe.ViewRecipeStar.stars) : 0,
+    } : null
+}
+
+module.exports.ingredientResponseData = (ingredient) => {
+    return ingredient ? {
+        id: ingredient.id,
+        description: ingredient.description
+    } : null
+}
+
+module.exports.stepResponseData = (step) => {
+    return step ? {
+        id: step.id,
+        description: step.description,
+        image: step.image
     } : null
 }
 

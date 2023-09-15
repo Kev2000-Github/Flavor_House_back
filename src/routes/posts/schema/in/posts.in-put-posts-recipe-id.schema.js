@@ -17,18 +17,11 @@ module.exports = {
                     type: 'array',
                     items: { type: 'string' }
                 },
-                steps: {
+                stepsContent: {
                     type: 'array',
-                    items: {
-                        type: 'object',
-                        properties: {
-                            description: {type: 'string'},
-                            picture: {type: 'string'}
-                        }
-                    }
+                    items: { type: 'string'}
                 },
-                picture: {type: 'string'}
-            }
+            },
         },
         params: {
             type: 'object'

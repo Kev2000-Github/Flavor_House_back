@@ -3,8 +3,29 @@ const {Router} = require('express')
 const router = Router()
 const { resolve } = require('path')
 const controller = require('./users.controller')
-const {validateRequestSchema, validateResponseSchema, authentication} = require('../../middlewares')
-const { paginationConfig } = require('../../middlewares/paginationConfig')
+const {validateRequestSchema, validateResponseSchema, authentication, paginationConfig, fileHandler} = require('../../middlewares')
+
+router.get(
+    '/OTP', 
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'users.in-get-users-otp.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'users.out-get-users-otp.schema.js'))),
+    controller.get_users_OTP
+)
+
+router.put(
+    '/OTP', 
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'users.in-put-users-otp.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'users.out-put-users-otp.schema.js'))),
+    authentication,
+    controller.put_users_OTP
+)
+
+router.post(
+    '/OTP', 
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'users.in-post-users-otp.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'users.out-post-users-otp.schema.js'))),
+    controller.post_users_OTP
+)
 
 router.get(
     '/', 
@@ -35,6 +56,7 @@ router.put(
     validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'users.in-put-users.schema.js'))),
     validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'users.out-put-users.schema.js'))),
     authentication,
+    fileHandler({fields: [{name: 'avatar',fileNames: ['avatar']}]}),
     controller.put_users
 )
 
@@ -54,6 +76,8 @@ router.post(
     authentication,
     controller.post_users_follow_id
 )
+
+
 //ROUTES ABOVE --DON'T TOUCH THIS--
 module.exports = {
     usersRouter: router

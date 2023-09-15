@@ -1,6 +1,6 @@
 
-const { controllerWrapper } = require('../../utils/common')
-const {Users, Interests, Countries, ViewUserInfo, sequelize, Followers, Sequelize} = require('../../database/models')
+const { controllerWrapper, genRandomNumber } = require('../../utils/common')
+const {Users, Interests, Countries, ViewUserInfo, sequelize, Followers, Sequelize,RecoveryCodes} = require('../../database/models')
 const { paginate } = require('../../database/helper')
 const { HttpStatusError } = require('../../errors/httpStatusError')
 const { messages } = require('./messages')
@@ -8,7 +8,8 @@ const config = require('../../config')
 const uuid = require('uuid').v4
 const jwt = require('jsonwebtoken')
 const {responseData} = require('./helper')
-
+const { sendMail } = require('../../mailer')
+const { s3Provider } = require('../../providers/s3')
 const includeOpts = {include: [Interests, Countries]}
 
 const commonQueryURLIncludeOptions = (params, userId) => {
@@ -80,9 +81,15 @@ module.exports.put_users = controllerWrapper(async (req, res) => {
     await sequelize.transaction(async transaction => {
         const userInfo = {fullName, username, password, email, sex, phoneNumber, countryId }
         let user = await Users.findByPk(id)
-        if(!user) throw HttpStatusError.notFound(messages.notFound)    
+        if(!user) throw HttpStatusError.notFound(messages.notFound)
+        if(req.files.avatar && req.files.avatar.length > 0){
+            const avatarFile = req.files.avatar[0]
+            const key = `${user.id}-${avatarFile.originalname}`
+            await s3Provider.upload(key, avatarFile.buffer)   
+            userInfo.avatar = key
+        }
         await user.update({ ...userInfo, step: 1 }, {transaction})
-        await user.setInterests(interests, {transaction})
+        if(interests) await user.setInterests(interests, {transaction})
     })
     const user = await Users.findByPk(id, includeOpts)
     res.json({data: responseData(user)})
@@ -113,3 +120,58 @@ module.exports.post_users_follow_id = controllerWrapper(async (req, res) => {
     }
     res.json({data: {follow}})
 })
+
+
+module.exports.get_users_OTP = controllerWrapper(async (req, res) => {
+    const {email} = req.body
+    const user = await Users.findOne({where:{email}})
+    if(!user) throw HttpStatusError.notFound(messages.notFound)
+    const code = genRandomNumber(999999, 100000)
+    await RecoveryCodes.create({
+        id: uuid(),
+        email,
+        code
+    })
+    sendMail(
+        email, 
+        'Recuperación de Contraseña | Flavor House',
+        `Codigo de Recuperación: ${code}`
+    )
+    res.json({data:email})
+})
+
+module.exports.post_users_OTP = controllerWrapper(async (req, res) => {
+    const {email,code} = req.body
+
+    const recovery = await RecoveryCodes.findOne({where:{email,code}})
+    if(!recovery) throw HttpStatusError.notFound(messages.recoveryNotFound)
+    await recovery.destroy()
+
+    const user = await Users.findOne({where:{email}})
+    const data = responseData(user)
+    const token = jwt.sign(
+        data,
+        config.JWT_TOKEN,
+        {
+            expiresIn: '7d',
+        }
+    )
+    res.json({data, token})
+
+})
+
+
+module.exports.put_users_OTP = controllerWrapper(async (req, res) => {
+    const {password} = req.body
+    const {id} = req.user
+
+    const user = await Users.findByPk(id)
+    if(!user) throw HttpStatusError.notFound(messages.notFound)
+
+    await user.update({password})
+
+    res.json({data:true})
+
+})
+
+

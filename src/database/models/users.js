@@ -70,7 +70,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
         },
         avatar: {
-            type: DataTypes.TEXT
+            type: DataTypes.STRING
         },
         step: {
             type: DataTypes.INTEGER,
