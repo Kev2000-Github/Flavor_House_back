@@ -271,11 +271,18 @@ module.exports.get_posts_moment_id = controllerWrapper(async (req, res) => {
 })
 
 module.exports.post_posts_moment = controllerWrapper(async (req, res) => {
-    const { description, image } = req.body
+    const { description } = req.body
     const userId = req.user.id
     const postId = uuid()
 
     await sequelize.transaction(async (transaction) => {
+        let key
+        if(req.files?.post){
+            const postFile = req.files.post[0]
+            const ext = postFile.mimetype.split('/').pop()
+            key = `moment-${postId}.${ext}`
+            await s3Provider.upload(key, postFile.buffer)
+        }
         await Posts.create(
             {
                 id: postId,
@@ -289,7 +296,7 @@ module.exports.post_posts_moment = controllerWrapper(async (req, res) => {
             {
                 postId,
                 description,
-                image,
+                image: key,
             },
             { transaction }
         )
@@ -301,7 +308,7 @@ module.exports.post_posts_moment = controllerWrapper(async (req, res) => {
 })
 
 module.exports.put_posts_moment_id = controllerWrapper(async (req, res) => {
-    const { description, image } = req.body
+    const { description } = req.body
     const userId = req.user.id
     const postId = req.params.id
     const moment = await Moments.findByPk(postId, { include: [Posts] })
@@ -313,10 +320,18 @@ module.exports.put_posts_moment_id = controllerWrapper(async (req, res) => {
         throw HttpStatusError.notFound(messages.notEditable)
     }
 
+    let key
+    if(req.files?.post){
+        const postFile = req.files.post[0]
+        const ext = postFile.mimetype.split('/').pop()
+        key = `moment-${postId}.${ext}`
+        await s3Provider.delete(moment.image)
+        await s3Provider.upload(key, postFile.buffer)
+    }
     await moment.update(
         {
             description,
-            image,
+            image: key,
         }
     )
 
@@ -325,7 +340,6 @@ module.exports.put_posts_moment_id = controllerWrapper(async (req, res) => {
         includeOpts(userId, false)
     )
     if (!updatedMoment) throw HttpStatusError.notFound(messages.notFound)
-    updatedMoment.data = 
     res.json({ data: responseData(updatedMoment) })
 })
 

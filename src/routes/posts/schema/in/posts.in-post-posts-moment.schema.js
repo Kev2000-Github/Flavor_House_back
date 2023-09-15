@@ -4,10 +4,13 @@ module.exports = {
         body: {
             type: 'object',
             properties: {
-                description: {type: 'string'},
-                image: {type: 'string'}
+                description: {
+                    type: 'string',
+                    minLength: 10,
+                    maxLength: 500
+                }
             },
-            required: ['description', 'image']
+            required: ['description']
         },
         params: {
             type: 'object'

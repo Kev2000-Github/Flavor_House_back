@@ -84,6 +84,7 @@ router.get(
 
 router.post(
     '/moment',
+    fileHandler({ fields: [{name: 'post', fileNames: ['post']}] }),
     validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'posts.in-post-posts-moment.schema.js'))),
     validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'posts.out-post-posts-moment.schema.js'))),
     authentication,
@@ -92,6 +93,7 @@ router.post(
 
 router.put(
     '/moment/:id',
+    fileHandler({ fields: [{name: 'post', fileNames: ['post']}] }),
     validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'posts.in-put-posts-moment-id.schema.js'))),
     validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'posts.out-put-posts-moment-id.schema.js'))),
     authentication,

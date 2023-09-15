@@ -9,9 +9,7 @@ module.exports = {
                     minLength: 10,
                     maxLength: 500
                 },
-                image: { type: 'string' }
             },
-            required: ['description', 'image']
         },
         params: {
             type: 'object',
