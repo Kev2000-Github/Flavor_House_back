@@ -9,7 +9,7 @@ const uuid = require('uuid').v4
 const jwt = require('jsonwebtoken')
 const {responseData} = require('./helper')
 const { sendMail } = require('../../mailer')
-
+const { s3Provider } = require('../../providers/s3')
 const includeOpts = {include: [Interests, Countries]}
 
 const commonQueryURLIncludeOptions = (params, userId) => {
@@ -81,7 +81,13 @@ module.exports.put_users = controllerWrapper(async (req, res) => {
     await sequelize.transaction(async transaction => {
         const userInfo = {fullName, username, password, email, sex, phoneNumber, countryId }
         let user = await Users.findByPk(id)
-        if(!user) throw HttpStatusError.notFound(messages.notFound)    
+        if(!user) throw HttpStatusError.notFound(messages.notFound)
+        if(req.files.length > 0){
+            const avatarFile = req.files[0]
+            const key = `${user.id}-${avatarFile.originalname}`
+            s3Provider.upload(key, avatarFile.buffer)   
+            userInfo.avatar = key
+        }
         await user.update({ ...userInfo, step: 1 }, {transaction})
         if(interests) await user.setInterests(interests, {transaction})
     })

@@ -3,8 +3,7 @@ const {Router} = require('express')
 const router = Router()
 const { resolve } = require('path')
 const controller = require('./users.controller')
-const {validateRequestSchema, validateResponseSchema, authentication} = require('../../middlewares')
-const { paginationConfig } = require('../../middlewares/paginationConfig')
+const {validateRequestSchema, validateResponseSchema, authentication, paginationConfig, fileHandler} = require('../../middlewares')
 
 router.get(
     '/OTP', 
@@ -57,6 +56,7 @@ router.put(
     validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'users.in-put-users.schema.js'))),
     validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'users.out-put-users.schema.js'))),
     authentication,
+    fileHandler({ fieldName: 'avatar', fileNames: ['avatar']}),
     controller.put_users
 )
 

@@ -45,7 +45,7 @@ module.exports = {
                 }
             },
             avatar: {
-                type: Sequelize.TEXT
+                type: Sequelize.STRING
             },
             step: {
                 type: Sequelize.INTEGER,

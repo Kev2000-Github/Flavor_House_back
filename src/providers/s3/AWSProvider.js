@@ -6,7 +6,7 @@ const {
     DeleteObjectCommand
 } = require('@aws-sdk/client-s3')
 const {S3Provider} = require('./S3Provider')
-
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner')
 class AWSS3Provider extends S3Provider {
     constructor(){
         super()
@@ -81,6 +81,18 @@ class AWSS3Provider extends S3Provider {
         }
         const command = new DeleteObjectCommand(input)
         return this.client.send(command)
+    }
+
+    signedURL(key, expiresIn = 36000, fileName){
+        const input = {
+            Key: key,
+            Bucket: this.connectionProps.bucket
+        }
+        if (fileName) {
+            input.ResponseContentDisposition = 'attachment; filename = "' + fileName + '"'
+        }
+        const command = new GetObjectCommand(input)
+        return getSignedUrl(this.client, command, { expiresIn })
     }
 }
 

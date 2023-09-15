@@ -23,5 +23,14 @@ module.exports = {
         pass: process.env.EMAIL_PASSWORD,
         sender: process.env.EMAIL_SENDER,
         from: process.env.EMAIL_FROM
+    },
+    S3: {
+        region: process.env.AWS_REGION,
+        endpoint: process.env.AWS_ENDPOINT,
+        bucket: process.env.AWS_BUCKET,
+        credentials: {
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+        }
     }
 }

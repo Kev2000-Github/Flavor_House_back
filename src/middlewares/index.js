@@ -2,3 +2,4 @@ module.exports.validateRequestSchema = require('./validateRequestSchema.middlewa
 module.exports.validateResponseSchema = require('./validateResponseSchema.middleware').validateResponseSchema
 module.exports.authentication = require('./authentication.middleware').authentication
 module.exports.paginationConfig = require('./paginationConfig').paginationConfig
+module.exports.fileHandler = require('./fileHandler.middleware').fileHandler

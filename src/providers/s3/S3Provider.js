@@ -6,7 +6,7 @@ class S3Provider {
         this.connectionProps = {
             bucket: config.S3.bucket,
             region: config.S3.region,
-            endpoint: config.S3.endpoint,
+            endpoint: config.S3.endpoint ?? undefined,
             credentials: {
                 accessKeyId: config.S3.credentials.accessKeyId,
                 secretAccessKey: config.S3.credentials.secretAccessKey

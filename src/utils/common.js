@@ -59,6 +59,10 @@ const genRandomNumber = (top, bottom) => {
     return Math.floor((Math.random() * (top - bottom + 1)) + bottom)
 }
 
+const removeExtension = (fileName) => {
+    return fileName.replace(/.\w+$/, '')
+}
+
 module.exports = {
     isJSON,
     controllerWrapper,
@@ -67,5 +71,6 @@ module.exports = {
     verifyPassword,
     errorFormatter,
     timeDifferenceHours,
-    genRandomNumber
+    genRandomNumber,
+    removeExtension
 }
