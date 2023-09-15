@@ -56,7 +56,7 @@ router.put(
     validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'users.in-put-users.schema.js'))),
     validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'users.out-put-users.schema.js'))),
     authentication,
-    fileHandler({ fieldName: 'avatar', fileNames: ['avatar']}),
+    fileHandler({fields: [{name: 'avatar',fileNames: ['avatar']}]}),
     controller.put_users
 )
 

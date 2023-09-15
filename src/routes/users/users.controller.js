@@ -82,10 +82,10 @@ module.exports.put_users = controllerWrapper(async (req, res) => {
         const userInfo = {fullName, username, password, email, sex, phoneNumber, countryId }
         let user = await Users.findByPk(id)
         if(!user) throw HttpStatusError.notFound(messages.notFound)
-        if(req.files.length > 0){
-            const avatarFile = req.files[0]
+        if(req.files.avatar && req.files.avatar.length > 0){
+            const avatarFile = req.files.avatar[0]
             const key = `${user.id}-${avatarFile.originalname}`
-            s3Provider.upload(key, avatarFile.buffer)   
+            await s3Provider.upload(key, avatarFile.buffer)   
             userInfo.avatar = key
         }
         await user.update({ ...userInfo, step: 1 }, {transaction})
