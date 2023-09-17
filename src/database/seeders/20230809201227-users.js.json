@@ -2,6 +2,7 @@
     {
         "id": "541429cb-b47b-4eb9-939e-05ed789069a1",
         "full_name": "Juan Toledo",
+        "avatar": "avatar.jpg",
         "username": "ReyDeLaCocina",
         "email": "Juan@gmail.com",
         "password": "1234",
@@ -14,6 +15,7 @@
     },
     {
         "id": "8f9d45cd-6c4a-4e87-97b0-9f0ba4e3cafd",
+        "avatar": "avatar.jpg",
         "full_name": "Maria Perez",
         "username": "MariaP",
         "email": "Maria@gmail.com",
@@ -27,6 +29,7 @@
     },
     {
         "id": "3eac14ef-df45-4a2b-8d7a-1b825b9250d3",
+        "avatar": "avatar.jpg",
         "full_name": "Alex Johnson",
         "username": "AlexJ",
         "email": "Alex@gmail.com",
@@ -40,6 +43,7 @@
     },
     {
         "id": "6b1f983e-9f48-4e4b-8c64-81f4289e72d7",
+        "avatar": "avatar.jpg",
         "full_name": "Emily Davis",
         "username": "EmiD",
         "email": "Emily@gmail.com",
@@ -53,6 +57,7 @@
     },
     {
         "id": "72c715b8-2565-4d87-b825-681fcf4f6b15",
+        "avatar": "avatar.jpg",
         "full_name": "Michael Smith",
         "username": "MikeS",
         "email": "Mike@gmail.com",
@@ -66,6 +71,7 @@
     },
     {
         "id": "f56f5d88-1e21-4df2-8f63-9d153ec2e7a0",
+        "avatar": "avatar.jpg",
         "full_name": "Sophia Hernandez",
         "username": "SophieH",
         "email": "Sophia@gmail.com",
