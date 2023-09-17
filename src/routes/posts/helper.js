@@ -10,7 +10,7 @@ const responseData = (post) => {
         let result = {
             id: post.id,
             description: post.Moment?.description ?? post.Recipe?.description,
-            image: post.Moment?.image ?? post.Recipe?.image,
+            image: post.Moment?.image ?? post.Recipe?.image ?? null,
             madeBy: userResponseData(post.User),
             likes: post.getLikes(),
             isLiked: post.Likes.length > 0,
