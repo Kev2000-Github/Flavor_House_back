@@ -1,11 +1,34 @@
 const { timeDifferenceHours } = require('../../utils/common')
 const {responseDataShort: userResponseData} = require('../users/helper')
 const { enumArray } = require('../../database/helper')
-const { ORDER } = require('../../database/constants')
+const { ORDER, POST_TYPE } = require('../../database/constants')
 const { Interests, Sequelize }  = require('../../database/models')
 
 const responseData = (post) => {
-    return post ? {
+    if(!post) return null
+    if(post.Moment || post.Recipe){
+        let result = {
+            id: post.id,
+            description: post.Moment?.description ?? post.Recipe?.description,
+            image: post.Moment?.image ?? post.Recipe?.image,
+            madeBy: userResponseData(post.User),
+            likes: post.getLikes(),
+            isLiked: post.Likes.length > 0,
+            isFavorite: post.Favorites.length > 0,
+            createdAt: post.createdAt
+        }
+        if(post.Recipe){
+            result = {
+                ...result,
+                title: post.Recipe.name,
+                Tags: post.Recipe.Tags ? post.Recipe.Tags.map(tag => tagResponseData(tag)) : null,
+                stars: post.Recipe.ViewRecipeStar ? Number(post.Recipe.ViewRecipeStar.stars) : 0,        
+            }
+            return result
+        }
+        return result
+    }
+    return {
         id: post.postId,
         description: post.description,
         image: post.image,
@@ -14,7 +37,7 @@ const responseData = (post) => {
         isLiked: post.Post?.Likes.length > 0,
         isFavorite: post.Post?.Favorites.length > 0,
         createdAt: post.Post.createdAt
-    } : null
+    }
 }
 module.exports.responseData = responseData
 
@@ -55,6 +78,11 @@ module.exports.formatOrder = (order) => {
     return ORDER.DESC
 }
 
+module.exports.formatType = (type) => {
+    if(enumArray(POST_TYPE).includes(type)) return type 
+    return null
+}
+
 const formatTags = (search) => {
     const searchValues = search.split(';')
     const formattedSearchs = searchValues.map(search => {
@@ -84,6 +112,16 @@ module.exports.getRecipeSearchOpts = async (search, tags) => {
     }
     if(formattedSearch){
         opts.where = {name: {[like]: formattedSearch}}
+    }
+    return opts
+}
+
+module.exports.getMomentSearchOpts = async (search) => {
+    const {like} = Sequelize.Op
+    const formattedSearch = search ? `#${search}%` : null
+    const opts = {}
+    if(formattedSearch){
+        opts.where = {description: {[like]: formattedSearch}}
     }
     return opts
 }

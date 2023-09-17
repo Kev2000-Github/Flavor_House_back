@@ -123,6 +123,15 @@ router.post(
     authentication,
     controller.post_posts_like_id
 )
+
+router.get(
+    '/', 
+    validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'posts.in-get-posts.schema.js'))),
+    validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'posts.out-get-posts.schema.js'))),
+    authentication,
+    paginationConfig,
+    controller.get_posts
+)
 //ROUTES ABOVE --DON'T TOUCH THIS--
 module.exports = {
     postsRouter: router

@@ -22,6 +22,8 @@ const {
     ingredientResponseData, 
     stepResponseData,
     responseData,
+    getMomentSearchOpts,
+    formatType,
 } = require('./helper')
 const { HttpStatusError } = require('../../errors/httpStatusError')
 const { messages } = require('./messages')
@@ -65,8 +67,11 @@ module.exports.get_posts_recipe = controllerWrapper(async (req, res) => {
     } else {
         opts.include.push(includeOpts(userId, false).include[0])
     }
-    if (order) opts.order = [['createdAt', order]]
-    opts = { ...opts, ...pagination }
+    opts = {
+        ...opts, 
+        ...pagination,
+        order: [['createdAt', order]]
+    }
     opts.include.push(ViewRecipeStars)
     const posts = await paginate(Recipes, opts)
     posts.data = posts.data.map((post) => recipeResponseData(post))
@@ -251,11 +256,15 @@ module.exports.delete_posts_recipe_id = controllerWrapper(async (req, res) => {
 
 module.exports.get_posts_moment = controllerWrapper(async (req, res) => {
     const userId = req.user.id
-
     const pagination = req.pagination
     const order = formatOrder(req.query?.order)
-    let opts = { ...includeOpts(userId, false), ...pagination }
-    if (order) opts.order = [['createdAt', order]]
+    const searchOpts = getMomentSearchOpts(req.requery?.search)
+    let opts = {
+        ...searchOpts,
+        ...includeOpts(userId, false), 
+        ...pagination,
+        order: [['createdAt', order]]
+    }
     const moments = await paginate(Moments, opts)
     moments.data = moments.data.map(post => responseData(post)) 
     res.json(moments)
@@ -438,4 +447,50 @@ module.exports.post_posts_like_id = controllerWrapper(async (req, res) => {
         await Likes.destroy({where: {userId, postId: id}})
     }
     res.json({data: isLiked})
+})
+
+
+module.exports.get_posts = controllerWrapper(async (req, res) => {
+    const userId = req.user.id
+    const pagination = req.pagination
+    const order = formatOrder(req.query?.order)
+    const isOwn = req.query?.own === 'true'
+    const isFavorite = req.query?.favorite === 'true'
+    const type = formatType(req.query?.type)
+    const whereOpts = { where: {} }
+    if(isOwn) whereOpts.where = { madeBy: userId }
+    if(type) whereOpts.where.type = type
+    const opts = {
+        include: [
+            Moments,
+            {
+                model: Recipes,
+                include: [
+                    {
+                        model: Interests,
+                        as: 'Tags'
+                    }
+                ]
+            },
+            Likes,
+            Users,
+            ViewPostsLikes,
+            {
+                model: Favorites,
+                required: isFavorite,
+                where: { userId },
+            },
+            {
+                model: Likes,
+                required: false,
+                where: { userId },
+            },
+        ], 
+        ...whereOpts,
+        ...pagination,
+        order: [['createdAt', order]]
+    }
+    const posts = await paginate(Posts, opts)
+    posts.data = posts.data.map(post => responseData(post))
+    res.json(posts)
 })

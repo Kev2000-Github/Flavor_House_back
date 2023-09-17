@@ -24,6 +24,12 @@ module.exports = (sequelize, DataTypes) => {
             Posts.hasMany(models.Favorites, {
                 foreignKey: 'post_id'
             })
+            Posts.hasOne(models.Moments, {
+                foreignKey: 'postId'
+            })
+            Posts.hasOne(models.Recipes, {
+                foreignKey: 'postId'
+            })
         }
     }
     Posts.init({
