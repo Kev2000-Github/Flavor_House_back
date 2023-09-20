@@ -25,7 +25,7 @@ module.exports.get_comments = controllerWrapper(async (req, res) => {
 module.exports.delete_comments_id = controllerWrapper(async (req, res) => {
     const {id}= req.params
 
-    const comment = await Comments.findByPk(id)
+    const comment = await Comments.findByPk(id, {include: [Users]})
     if(!comment) throw HttpStatusError.notFound(messages.notFound)
 
     await comment.destroy()
@@ -39,7 +39,7 @@ module.exports.put_comments_id = controllerWrapper(async (req, res) => {
     const {id}= req.params
     const {content} = req.body
 
-    const comment = await Comments.findByPk(id)
+    const comment = await Comments.findByPk(id, {include: [Users]})
     if(!comment) throw HttpStatusError.notFound(messages.notFound)
 
     await comment.update({
@@ -57,14 +57,15 @@ module.exports.post_comments = controllerWrapper(async (req, res) => {
 
     const {postId,content} = req.body
     const { id } = req.user
-    const comment = await Comments.create({
-        id: uuid(),
+    const commentId = uuid()
+    await Comments.create({
+        id: commentId,
         userId: id,
         postId,
         content
     })
-    const data = responseData(comment)
-
+    const newComment = await Comments.findByPk(commentId, {include: [Users]})
+    const data = responseData(newComment)
     res.json({data})
 
 })

@@ -247,6 +247,7 @@ module.exports.delete_posts_recipe_id = controllerWrapper(async (req, res) => {
         await recipe.setTags([], { transaction })
         await Ingredients.destroy({ where: { recipeId: postId }, transaction })
         await Steps.destroy({ where: { recipeId: postId }, transaction })
+        await Posts.destroy({ where: {id: postId}, transaction })
         await recipe.destroy({ transaction })
     })
     res.json({ deleted: true })
@@ -363,8 +364,10 @@ module.exports.delete_posts_moment_id = controllerWrapper(async (req, res) => {
     if (!isEditable(moment.createdAt)) {
         throw HttpStatusError.notFound(messages.notEditable)
     }
-  
-    await moment.destroy()
+    await sequelize.trasaction(async transaction => {
+        await Posts.destroy({ where: {id: postId}, transaction })
+        await moment.destroy()
+    })
 
     res.json({ deleted: true })
 })

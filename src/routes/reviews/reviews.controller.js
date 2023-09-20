@@ -17,14 +17,14 @@ module.exports.get_reviews = controllerWrapper(async (req, res) => {
         include: [Users]
     }
     let review = await paginate(Reviews, opts)
-    review.data = review.data.map(interest => responseData(interest))
+    review.data = review.data.map(review => responseData(review))
     res.json({...review})
 })
 
 module.exports.put_reviews_id = controllerWrapper(async (req, res) => {
     const {id}= req.params
     const {content,stars} = req.body
-    const review = await Reviews.findByPk(id)
+    const review = await Reviews.findByPk(id, {include: [Users]})
     if(!review) throw HttpStatusError.notFound(messages.notFound)
 
     await review.update({
@@ -39,7 +39,7 @@ module.exports.put_reviews_id = controllerWrapper(async (req, res) => {
 module.exports.delete_reviews_id = controllerWrapper(async (req, res) => {
     const {id}= req.params
 
-    const review = await Reviews.findByPk(id)
+    const review = await Reviews.findByPk(id, {include: [Users]})
     if(!review) throw HttpStatusError.notFound(messages.notFound)
 
     await review.destroy()
@@ -52,13 +52,15 @@ module.exports.post_reviews = controllerWrapper(async (req, res) => {
 
     const {recipeId,content,stars} = req.body
     const { id } = req.user
-    const review = await Reviews.create({
-        id: uuid(),
+    const reviewId = uuid()
+    await Reviews.create({
+        id: reviewId,
         userId: id,
         recipeId,
         content,
         stars
     })
+    const review = await Reviews.findByPk(reviewId, {include: [Users]})
     const data = responseData(review)
 
     res.json({data})

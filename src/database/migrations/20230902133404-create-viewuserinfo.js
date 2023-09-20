@@ -32,6 +32,7 @@ JOIN (
 select users.id, COUNT(posts.id) as posts from users 
 left join posts 
 on users.id = posts.made_by
+where posts.deleted_at is NULL
 group by users.id
 ) T3 
 ON T1.id = T3.id;

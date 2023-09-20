@@ -57,8 +57,8 @@ module.exports = (sequelize, DataTypes) => {
         paranoid: true
     })
 
-    Posts.prototype.getLikes = () => {
-        return this.ViewPost?.likes ?? 0
+    Posts.prototype.getLikes = function() {
+        return this.ViewPostsLike?.likes ?? 0
     }
 
     return Posts

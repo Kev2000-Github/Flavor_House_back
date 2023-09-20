@@ -87,7 +87,7 @@ module.exports.formatType = (type) => {
 const formatTags = (search) => {
     const searchValues = search.split(';')
     const formattedSearchs = searchValues.map(search => {
-        return search.replaceAll('-',' ')
+        return search.replace(/-/g,' ')
     })
     return formattedSearchs
 }
@@ -95,7 +95,7 @@ const formatTags = (search) => {
 module.exports.getRecipeSearchOpts = async (search, tags) => {
     const {like} = Sequelize.Op
     const { and } = Sequelize
-    const formattedSearch = search ? `%${search.replaceAll('-',' ')}%` : null
+    const formattedSearch = search ? `%${search.replace(/-/g,' ')}%` : null
     const formattedTags = formatTags(tags ?? '')
     const validTags = await Interests.findAll({where: {name: formattedTags}})
     const validTagIds = validTags.map(tag => tag.id)
