@@ -6,7 +6,7 @@ const controller = require('./users.controller')
 const {validateRequestSchema, validateResponseSchema, authentication, paginationConfig, fileHandler} = require('../../middlewares')
 
 router.get(
-    '/OTP', 
+    '/OTP/:email', 
     validateRequestSchema(require(resolve(__dirname, 'schema', 'in', 'users.in-get-users-otp.schema.js'))),
     validateResponseSchema(require(resolve(__dirname, 'schema', 'out', 'users.out-get-users-otp.schema.js'))),
     controller.get_users_OTP

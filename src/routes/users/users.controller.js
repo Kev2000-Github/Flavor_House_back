@@ -123,10 +123,11 @@ module.exports.post_users_follow_id = controllerWrapper(async (req, res) => {
 
 
 module.exports.get_users_OTP = controllerWrapper(async (req, res) => {
-    const {email} = req.body
+    const {email} = req.params
     const user = await Users.findOne({where:{email}})
     if(!user) throw HttpStatusError.notFound(messages.notFound)
     const code = genRandomNumber(999999, 100000)
+    await RecoveryCodes.destroy({where: {email}})
     await RecoveryCodes.create({
         id: uuid(),
         email,
@@ -157,7 +158,6 @@ module.exports.post_users_OTP = controllerWrapper(async (req, res) => {
         }
     )
     res.json({data, token})
-
 })
 
 

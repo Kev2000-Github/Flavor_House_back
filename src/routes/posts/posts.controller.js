@@ -375,25 +375,17 @@ module.exports.delete_posts_moment_id = controllerWrapper(async (req, res) => {
 
 module.exports.get_posts_recipe_steps_id = controllerWrapper(async (req, res) => {
     const {id} = req.params
-    const opts = {
-        include: [Steps]
-    }
-    const post = await Recipes.findByPk(id, opts)
-    if(!post) throw HttpStatusError.notFound(messages.notFound)
-    const steps = post.Steps.map(step => stepResponseData(step))
-    res.json({data: steps})
+    const steps = await paginate(Steps, {where: { recipeId: id }})
+    steps.data = steps.data.map(step => stepResponseData(step))
+    res.json(steps)
 })
 
 
 module.exports.get_posts_recipe_ingredients_id = controllerWrapper(async (req, res) => {
     const {id} = req.params
-    const opts = {
-        include: [Ingredients]
-    }
-    const post = await Recipes.findByPk(id, opts)
-    if(!post) throw HttpStatusError.notFound(messages.notFound)
-    const ingredients = post.Ingredients.map(ingredient => ingredientResponseData(ingredient))
-    res.json({data: ingredients})
+    const ingredients = await paginate(Ingredients, { where: {recipeId: id} })
+    ingredients.data = ingredients.data.map(ingredient => ingredientResponseData(ingredient))
+    res.json(ingredients)
 })
 
 

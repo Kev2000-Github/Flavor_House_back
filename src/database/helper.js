@@ -27,7 +27,7 @@ module.exports.paginate = async (Model, options) => {
     const totalPages = Math.ceil(users.count/limit)
     const result = {
         data: users.rows,
-        page: offset + 1,
+        page: Math.ceil(offset/limit) + 1,
         items: limit,
         totalPages: totalPages,
     }
