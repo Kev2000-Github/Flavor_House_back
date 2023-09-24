@@ -2,7 +2,7 @@ const { timeDifferenceHours } = require('../../utils/common')
 const {responseDataShort: userResponseData} = require('../users/helper')
 const { enumArray } = require('../../database/helper')
 const { ORDER, POST_TYPE } = require('../../database/constants')
-const { Interests, Sequelize }  = require('../../database/models')
+const { Interests, Posts, Likes, Followers, Users, Favorites, ViewPostsLikes, Sequelize }  = require('../../database/models')
 
 const responseData = (post) => {
     if(!post) return null
@@ -117,9 +117,9 @@ module.exports.getRecipeSearchOpts = async (search, tags) => {
     return opts
 }
 
-module.exports.getMomentSearchOpts = async (search) => {
+module.exports.getMomentSearchOpts = (search) => {
     const {like} = Sequelize.Op
-    const formattedSearch = search ? `#${search}%` : null
+    const formattedSearch = search ? `%#${search}%` : null
     const opts = {}
     if(formattedSearch){
         opts.where = {description: {[like]: formattedSearch}}
@@ -131,4 +131,38 @@ module.exports.isEditable = (createdAt) => {
     const now = new Date()
     const hours = timeDifferenceHours(createdAt, now)
     return hours < 24
+}
+
+module.exports.includeOpts = (userId, tag = true, onlyFollows = false) => {
+    const val = {
+        include: [
+            {
+                model: Posts,
+                required: true,
+                include: [
+                    onlyFollows ? {
+                        model: Users,
+                        required: true,
+                        include: {
+                            model: Followers,
+                            where: { followedBy: userId }
+                        }
+                    } : Users,
+                    ViewPostsLikes,
+                    {
+                        model: Favorites,
+                        required: false,
+                        where: { userId },
+                    },
+                    {
+                        model: Likes,
+                        required: false,
+                        where: { userId },
+                    },
+                ],
+            },
+        ],
+    }
+    if (tag) val.include.push({ model: Interests, as: 'Tags' })
+    return val
 }

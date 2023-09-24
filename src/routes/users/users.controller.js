@@ -7,7 +7,7 @@ const { messages } = require('./messages')
 const config = require('../../config')
 const uuid = require('uuid').v4
 const jwt = require('jsonwebtoken')
-const {responseData} = require('./helper')
+const {responseData, formatExclude} = require('./helper')
 const { sendMail } = require('../../mailer')
 const { s3Provider } = require('../../providers/s3')
 const includeOpts = {include: [Interests, Countries]}
@@ -31,11 +31,13 @@ module.exports.get_users = controllerWrapper(async (req, res) => {
     const { Op } = Sequelize
     const pagination = req.pagination
     const search = req.query.search
+    const excludeIds = formatExclude(req.query.exclude)
     const includeOptions = commonQueryURLIncludeOptions(req.query, req.user.id)
     const opts = {...pagination, ...includeOptions}
     if(search) opts.where = { username: {
         [Op.like]: `%${search}%`
     } }
+    if(excludeIds.length > 0) opts.where.id = { [Op.notIn]: excludeIds }
     let users = await paginate(Users, opts)
     users.data = users.data.map(user => responseData(user))
     res.json({...users})

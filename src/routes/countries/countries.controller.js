@@ -6,7 +6,10 @@ const { responseData } = require('./helper')
 
 module.exports.get_countries = controllerWrapper(async (req, res) => {
     const pagination = req.pagination
-    const opts = {...pagination}
+    const opts = {
+        ...pagination,
+        order: [['name', 'ASC']]
+    }
     let users = await paginate(Countries, opts)
     users.data = users.data.map(user => responseData(user))
     res.json({...users})

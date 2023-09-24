@@ -24,38 +24,13 @@ const {
     responseData,
     getMomentSearchOpts,
     formatType,
+    includeOpts
 } = require('./helper')
 const { HttpStatusError } = require('../../errors/httpStatusError')
 const { messages } = require('./messages')
 const { POST_TYPE } = require('../../database/constants')
 const { s3Provider } = require('../../providers/s3')
 const uuid = require('uuid').v4
-
-const includeOpts = (userId, tag = true) => {
-    const val = {
-        include: [
-            {
-                model: Posts,
-                include: [
-                    Users,
-                    ViewPostsLikes,
-                    {
-                        model: Favorites,
-                        required: false,
-                        where: { userId },
-                    },
-                    {
-                        model: Likes,
-                        required: false,
-                        where: { userId },
-                    },
-                ],
-            },
-        ],
-    }
-    if (tag) val.include.push({ model: Interests, as: 'Tags' })
-    return val
-}
 
 module.exports.get_posts_recipe = controllerWrapper(async (req, res) => {
     const userId = req.user.id
@@ -259,10 +234,10 @@ module.exports.get_posts_moment = controllerWrapper(async (req, res) => {
     const userId = req.user.id
     const pagination = req.pagination
     const order = formatOrder(req.query?.order)
-    const searchOpts = getMomentSearchOpts(req.requery?.search)
+    const searchOpts = getMomentSearchOpts(req.query?.search)
     let opts = {
         ...searchOpts,
-        ...includeOpts(userId, false), 
+        ...includeOpts(userId, false, true), 
         ...pagination,
         order: [['createdAt', order]]
     }
@@ -449,11 +424,11 @@ module.exports.get_posts = controllerWrapper(async (req, res) => {
     const userId = req.user.id
     const pagination = req.pagination
     const order = formatOrder(req.query?.order)
-    const isOwn = req.query?.own === 'true'
+    const madeBy = req.query?.madeBy
     const isFavorite = req.query?.favorite === 'true'
     const type = formatType(req.query?.type)
     const whereOpts = { where: {} }
-    if(isOwn) whereOpts.where = { madeBy: userId }
+    if(madeBy) whereOpts.where = { madeBy }
     if(type) whereOpts.where.type = type
     const opts = {
         include: [

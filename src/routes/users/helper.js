@@ -39,3 +39,8 @@ module.exports.responseDataShort = (user) => {
         isFollowed: user.Followers ? user.isFollowed() : null
     }: null
 }
+
+module.exports.formatExclude = (excludeString) => {
+    if(!excludeString) return []
+    return excludeString.split(',')
+}
