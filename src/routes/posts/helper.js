@@ -2,7 +2,7 @@ const { timeDifferenceHours } = require('../../utils/common')
 const {responseDataShort: userResponseData} = require('../users/helper')
 const { enumArray } = require('../../database/helper')
 const { ORDER, POST_TYPE } = require('../../database/constants')
-const { Interests, Posts, Likes, Followers, Users, Favorites, ViewPostsLikes, Sequelize }  = require('../../database/models')
+const { Interests, Posts, Likes, Users, Favorites, ViewPostsLikes, Sequelize }  = require('../../database/models')
 
 const responseData = (post) => {
     if(!post) return null
@@ -133,20 +133,17 @@ module.exports.isEditable = (createdAt) => {
     return hours < 24
 }
 
-module.exports.includeOpts = (userId, tag = true, onlyFollows = false) => {
+module.exports.includeOpts = (userId, tag = true, userIds = null) => {
     const val = {
         include: [
             {
                 model: Posts,
                 required: true,
                 include: [
-                    onlyFollows ? {
+                    userIds ? {
                         model: Users,
                         required: true,
-                        include: {
-                            model: Followers,
-                            where: { followedBy: userId }
-                        }
+                        where: { id: userIds }
                     } : Users,
                     ViewPostsLikes,
                     {

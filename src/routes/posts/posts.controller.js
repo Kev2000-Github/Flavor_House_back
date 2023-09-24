@@ -9,6 +9,7 @@ const {
     Interests,
     Ingredients,
     Steps,
+    Followers,
     ViewRecipeStars,
     sequelize,
 } = require('../../database/models')
@@ -235,9 +236,14 @@ module.exports.get_posts_moment = controllerWrapper(async (req, res) => {
     const pagination = req.pagination
     const order = formatOrder(req.query?.order)
     const searchOpts = getMomentSearchOpts(req.query?.search)
+    const followIds = await Followers.findAll({
+        where: {followedBy: userId}
+    })
+    const userIds = followIds.map(item => item.userId)
+    userIds.push(userId)
     let opts = {
         ...searchOpts,
-        ...includeOpts(userId, false, true), 
+        ...includeOpts(userId, false, userIds), 
         ...pagination,
         order: [['createdAt', order]]
     }
