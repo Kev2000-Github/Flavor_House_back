@@ -57,6 +57,8 @@ module.exports.get_posts_recipe = controllerWrapper(async (req, res) => {
 module.exports.get_posts_recipe_id = controllerWrapper(async (req, res) => {
     const { id } = req.params
     const userId = req.user.id
+    const opts = includeOpts(userId)
+    opts.include.push(ViewRecipeStars)
     const post = await Recipes.findByPk(id, includeOpts(userId))
     if (!post) throw HttpStatusError.notFound(messages.notFound)
     res.json({ data: recipeResponseData(post) })
@@ -445,7 +447,8 @@ module.exports.get_posts = controllerWrapper(async (req, res) => {
                     {
                         model: Interests,
                         as: 'Tags'
-                    }
+                    },
+                    ViewRecipeStars
                 ]
             },
             Likes,
