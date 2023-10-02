@@ -52,7 +52,7 @@ module.exports.post_reviews = controllerWrapper(async (req, res) => {
 
     const {recipeId,content,stars} = req.body
     const { id } = req.user
-    const prevReview = await Reviews.findOne({where: {userId: id}})
+    const prevReview = await Reviews.findOne({where: {userId: id, recipeId}})
     if(prevReview) throw HttpStatusError.forbidden(messages.alreadyReviewed)
     const reviewId = uuid()
     await Reviews.create({
