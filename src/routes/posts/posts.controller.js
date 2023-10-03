@@ -347,7 +347,7 @@ module.exports.delete_posts_moment_id = controllerWrapper(async (req, res) => {
     if (!isEditable(moment.createdAt)) {
         throw HttpStatusError.notFound(messages.notEditable)
     }
-    await sequelize.trasaction(async transaction => {
+    await sequelize.transaction(async transaction => {
         await Posts.destroy({ where: {id: postId}, transaction })
         await moment.destroy()
     })
